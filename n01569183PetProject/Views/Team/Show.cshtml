@@ -4,9 +4,31 @@
 }
 
 <h2>Team</h2>
-<h3 style="color: @Model.TeamColor;" >@Model.TeamName</h3>
-<p>Description: @Model.TeamDescription</p>
-<p>Win Condition: @Model.TeamWinCondition</p>
+
+
+
+<form class="row">
+    <div class="col">
+        <div class="form-group">
+            <label for="TeamName">Name</label>
+            <input id="TeamName" class="form-control" name="TeamName" value="@Model.TeamName" />
+        </div>
+        <div class="form-group">
+            <label for="TeamColor">Color</label>
+            <input id="TeamColor" class="form-control" type="color" name="TeamColor" value="@Model.TeamColor" />
+        </div>
+
+        <div class="form-group">
+            <label for="TeamDescirption">Description</label>
+            <textarea id="TeamDescirption" name="TeamDescirption" class="form-control form-control-lg">@Model.TeamDescription</textarea>
+        </div>
+    </div>
+    <div class="col">
+        <label for="WinCondition">Win Condition</label>
+        <textarea style="height: 100%" row="10" id="WinCondition" name="WinCondition" class="form-control ">@Model.TeamWinCondition</textarea>
+    </div>
+</form>
+
 @foreach(var role in Model.TeamRoles)
             {
                 <p>@role.RoleName - @role.RoleDescription</p>
