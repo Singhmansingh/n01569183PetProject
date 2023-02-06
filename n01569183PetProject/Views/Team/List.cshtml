@@ -1,0 +1,11 @@
+﻿@model IEnumerable<n01569183PetProject.Models.Team>
+@{
+    ViewBag.Title = "List";
+}
+
+<h2>List</h2>
+@foreach(var team in Model)
+            {
+                <a href="/Team/Show/@team.TeamId"><h2>@team.TeamName</h2></a>
+            }
+

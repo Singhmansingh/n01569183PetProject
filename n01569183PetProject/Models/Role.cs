@@ -12,6 +12,7 @@ namespace n01569183PetProject.Models
         [Key]
         public int RoleId { get; set; }
         public string RoleName { get; set; }
+        public string RoleDescription { get; set; }
 
         [ForeignKey("Team")]
         public int TeamId { get; set; }

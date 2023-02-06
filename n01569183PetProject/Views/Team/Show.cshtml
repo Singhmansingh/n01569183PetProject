@@ -1,0 +1,13 @@
+﻿@model n01569183PetProject.Models.TeamDto
+@{
+    ViewBag.Title = "Show";
+}
+
+<h2>Team</h2>
+<h3 style="color: @Model.TeamColor;" >@Model.TeamName</h3>
+<p>Description: @Model.TeamDescription</p>
+<p>Win Condition: @Model.TeamWinCondition</p>
+@foreach(var role in Model.TeamRoles)
+            {
+                <p>@role.RoleName - @role.RoleDescription</p>
+            }
