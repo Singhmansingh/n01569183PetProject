@@ -26,5 +26,11 @@ textarea {
 }*/
 
 textarea {
-    height: 100%;
+    resize: none;
+    height:auto;
 }
+
+/*
+    5
+
+*/

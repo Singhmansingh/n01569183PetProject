@@ -75,7 +75,9 @@ namespace n01569183PetProject.Controllers
         [Route("api/TeamData/UpdateTeam/{TeamId}")]
         public Team UpdateTeam(int TeamId, [FromBody] Team TeamData)
         {
+            Debug.Write("TeamData:"+(TeamData.TeamWinCondition));
             db.Teams.AddOrUpdate(TeamData);
+            db.SaveChanges();
 
             return FindTeam(TeamId);
         }
