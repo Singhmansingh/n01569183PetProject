@@ -1,0 +1,31 @@
+﻿@model IEnumerable<n01569183PetProject.Models.Team>
+@{
+    ViewBag.Title = "New";
+}
+
+<h2>New</h2>
+
+<form method="post" action="/Role/Submit">
+    <fieldset>
+        <label for="RoleName">Name</label>
+        <input name="RoleName" id="RoleName" />
+    </fieldset>
+    <fieldset>
+        <label for="RoleDescription">Role Description</label>
+        <textarea name="RoleDescription" id="RoleDescription"></textarea>
+    </fieldset>
+    <fieldset>
+        <label for="TeamId">Team</label>
+        <select name="TeamId">
+            <option disabled>-- Team --</option>
+            @foreach (var team in Model)
+            {
+
+                <option value="@team.TeamId">@team.TeamName</option>
+            }
+        </select>
+    </fieldset>
+    <fieldset>
+        <input type="submit" value="Save"/>
+    </fieldset>
+</form>

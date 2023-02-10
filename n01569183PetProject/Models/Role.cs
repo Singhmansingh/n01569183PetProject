@@ -19,4 +19,14 @@ namespace n01569183PetProject.Models
         public virtual Team Team { get; set; }
 
     }
+
+    public class RoleDto
+    {
+        public int RoleId { get; set; }
+        public string RoleName { get; set; }
+        public string RoleDescription { get; set; }
+        public int TeamId { get; set; }
+        public string TeamColor { get; set; }
+        public string TeamName { get; set; }
+    }
 }

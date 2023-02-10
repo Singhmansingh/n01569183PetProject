@@ -1,0 +1,13 @@
+﻿@model IEnumerable<n01569183PetProject.Models.Role>
+@{
+    ViewBag.Title = "List";
+}
+
+<h2>Roles</h2>
+<a href="/Role/New" class="btn btn-info">New Role</a>
+
+
+@foreach (var role in Model)
+{
+    <a href="/Role/Show/@role.RoleId"><h2>@role.RoleName</h2></a>
+}

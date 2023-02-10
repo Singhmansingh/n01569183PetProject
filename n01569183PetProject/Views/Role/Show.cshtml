@@ -1,0 +1,8 @@
+﻿@model n01569183PetProject.Models.RoleDto
+@{
+    ViewBag.Title = "Show";
+}
+
+<h2>@Model.RoleName</h2>
+<a href="/Team/Show/@Model.TeamId" style="color: @Model.TeamColor;">@Model.TeamName</a>
+<p>@Model.RoleDescription</p>

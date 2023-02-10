@@ -27,12 +27,12 @@
 
             <div class="form-group">
                 <label for="TeamDescirption">Description</label>
-                <textarea id="TeamDescirption" name="TeamDescription" class="form-control form-control-lg">@Model.TeamDescription</textarea>
+                <textarea id="TeamDescirption" name="TeamDescription" class="form-control" style="min-width: 100%;"></textarea>
             </div>
         </div>
         <div class="col-md-6">
             <label for="WinCondition">Win Condition</label>
-            <textarea id="WinCondition" name="TeamWinCondition" class="form-control " rows="6">@Model.TeamWinCondition</textarea>
+            <textarea id="WinCondition" name="TeamWinCondition" class="form-control " rows="6" style="min-width: 100%; min-height: initial;">@Model.TeamWinCondition</textarea>
         </div>
     </div>
     <div class="form-group">
@@ -41,7 +41,7 @@
     </div>
 </form>
 
-<h2>@Model.TeamName Team Roles </h2><a class="text-info">New Role</a>
+<h2>@Model.TeamName Team Roles </h2><a href="/Role/New" class="btn btn-info">New Role</a>
 
 <table class="table table-striped">
     <thead>
@@ -56,7 +56,7 @@
         {
             <tr>
                 <td>@role.RoleId</td>
-                <td><a href="#">@role.RoleName</a></td>
+                <td><a href="/Role/Show/@role.RoleId">@role.RoleName</a></td>
                 <td>@role.RoleDescription</td>
             </tr>
         }

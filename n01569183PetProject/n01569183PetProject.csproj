@@ -185,6 +185,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\PlayerDataController.cs" />
+    <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\RoleDataController.cs" />
     <Compile Include="Controllers\TeamController.cs" />
     <Compile Include="Controllers\TeamDataController.cs" />
@@ -283,6 +284,9 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Team\List.cshtml" />
     <Content Include="Views\Team\Show.cshtml" />
+    <Content Include="Views\Role\New.cshtml" />
+    <Content Include="Views\Role\List.cshtml" />
+    <Content Include="Views\Role\Show.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

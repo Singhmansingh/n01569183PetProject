@@ -39,6 +39,24 @@ namespace n01569183PetProject.Controllers
             return FoundRole;
         }
 
+        //FindRoleWithTeam
+        [HttpGet]
+        [Route("api/RoleData/FindRoleWithTeam/{RoleId}")]
+        public RoleDto FindRoleWithTeam(int RoleId)
+        {
+            Role FoundRole = db.Roles.Find(RoleId);
+
+            RoleDto Role = new RoleDto();
+            Role.RoleName = FoundRole.RoleName;
+            Role.RoleDescription = FoundRole.RoleDescription;
+            Role.TeamId = FoundRole.TeamId;
+            Role.RoleId = FoundRole.RoleId;
+            Role.TeamName = FoundRole.Team.TeamName;
+            Role.TeamColor = FoundRole.Team.TeamColor;
+
+            return Role;
+        }
+
         //DeleteRole
         [HttpGet]
         [Route("api/RoleData/DeleteRole/{RoleId}")]
