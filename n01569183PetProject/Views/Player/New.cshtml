@@ -1,0 +1,40 @@
+﻿@model IEnumerable<n01569183PetProject.Models.TeamDto>
+@{
+    ViewBag.Title = "New";
+}
+<ol class="breadcrumb">
+    <li><a href="/">Home</a></li>
+    <li><a href="/Player/List">Players</a></li>
+    <li><a href="/Player/New">New Player</a></li>
+</ol>
+<h2>New Player</h2>
+
+<form method="post" action="/Player/Submit">
+    <fieldset class="form-group">
+        <label>Player Name</label>
+        <input name="PlayerName" class="form-control" required/>
+    </fieldset>
+    <fieldset class="form-group">
+        <label>Player Password</label>
+        <input name="PlayerPassword" type="password" class="form-control" required/>
+    </fieldset>
+    <fieldset class="form-group">
+        <label>Player Starting Role</label>
+        <select name="RoleId" class="form-control" required>
+            <option disabled>-- Select a  Role --</option>
+
+            @foreach(var Team in Model)
+            {
+                <optgroup label="@Team.TeamName">
+                    @foreach(var Role in Team.TeamRoles)
+                        {
+                            <option value="@Role.RoleId">@Role.RoleName</option>
+                        }
+                </optgroup>
+            }
+        </select>
+    </fieldset>
+    <fieldset class="form-group">
+        <button type="submit" class="btn btn-success">Save</button>
+    </fieldset>
+</form>

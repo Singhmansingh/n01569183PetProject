@@ -1,0 +1,56 @@
+﻿@model IEnumerable<n01569183PetProject.Models.Player>
+@{
+    ViewBag.Title = "List";
+}
+<ol class="breadcrumb">
+    <li><a href="/">Home</a></li>
+    <li><a href="/Player/List">Players</a></li>
+</ol>
+<h2>Players</h2>
+<a href="/Player/New" class="btn btn-success">New Player</a>
+
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Player</th>
+            <th>Team</th>
+            <th>Role</th>
+            <th>Current State</th>
+            <th>Role Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var Player in Model)
+        {
+            <tr>
+                <td>
+                    <a href="/Player/Show/@Player.PlayerId">@Player.PlayerName</a>
+                </td>
+                <td>
+                    <a href="/Team/Show/@Player.Role.Team.TeamId" style="color: @Player.Role.Team.TeamColor">@Player.Role.Team.TeamName</a>
+                </td>
+                <td>
+                    <a style="color:@Player.Role.Team.TeamColor" href="/Role/Show/@Player.RoleId">@Player.Role.RoleName</a>
+                </td>
+
+                <td>
+                    @if (Player.PlayerAlive == false)
+                    {
+                        <p class="text-success">Alive</p>
+                    }
+                    else
+                    {
+                        <p class="text-danger">Dead</p>
+
+                    }
+                </td>
+
+                <td>
+                    @Player.Role.RoleDescription
+                </td>
+            </tr>
+           
+        }
+    </tbody>
+</table>

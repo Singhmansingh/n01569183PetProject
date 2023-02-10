@@ -2,12 +2,40 @@
 @{
     ViewBag.Title = "List";
 }
-
+<ol class="breadcrumb">
+    <li><a href="/">Home</a></li>
+    <li><a href="/Role/List">Roles</a></li>
+</ol>
 <h2>Roles</h2>
-<a href="/Role/New" class="btn btn-info">New Role</a>
+<a href="/Role/New" class="btn btn-success">New Role</a>
 
-
-@foreach (var role in Model)
-{
-    <a href="/Role/Show/@role.RoleId"><h2>@role.RoleName</h2></a>
+@{ 
+    // TODO: Order Roles by Team
 }
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Role</th>
+            <th>Team</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var role in Model)
+        {
+            <tr>
+                <td> 
+                    <a href="/Role/Show/@role.RoleId" style="color: @role.Team.TeamColor">@role.RoleName</a>
+                </td>
+                <td>
+                    @role.Team.TeamName
+                </td>
+                <td>
+                    @role.RoleDescription
+                </td>
+            </tr>
+           
+        }
+    </tbody>
+</table>

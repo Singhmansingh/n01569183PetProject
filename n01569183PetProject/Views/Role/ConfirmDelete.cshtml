@@ -1,0 +1,16 @@
+﻿@model n01569183PetProject.Models.Role
+@{
+    ViewBag.Title = "Delete";
+    Layout = "";
+}
+
+<h2>Confirm Deletion</h2>
+<p>Are you sure you want to delete the role: @Model.RoleName?</p>
+<form method="post" action="/Role/Delete/@Model.RoleId">
+    <input name="RoleId" value="@Model.RoleId" type="hidden" />
+    <fieldset class="form-group">
+        <button type="button" onclick="cancel('DeleteConfirmationBox')" class="btn btn-info">Cancel</button>
+        <button type="submit" class="btn btn-danger">Delete</button>
+    </fieldset>
+
+</form>

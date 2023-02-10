@@ -1,0 +1,39 @@
+﻿@{
+    ViewBag.Title = "Show";
+}
+<ol class="breadcrumb">
+    <li><a href="/">Home</a></li>
+    <li><a href="/Team/List">Teams</a></li>
+    <li><a href="/Team/New">New Team</a></li>
+</ol>
+<h2>New Team</h2>
+
+<form class="container" method="post" action="/Team/Add">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-6 form-group">
+                    <label for="TeamName" class="control-label">Name</label>
+                    <input type="text" id="TeamName" class="form-control" name="TeamName" />
+                </div>
+                <div class="col-md-6 form-group">
+                    <label for="TeamColor">Color</label>
+                    <input id="TeamColor" class="form-control" type="color" name="TeamColor"/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="TeamDescription">Description</label>
+                <textarea id="TeamDescription" name="TeamDescription" class="form-control" style="min-width: 100%;"></textarea>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <label for="WinCondition">Win Condition</label>
+            <textarea id="WinCondition" name="TeamWinCondition" class="form-control " rows="6" style="min-width: 100%; min-height: initial;"></textarea>
+        </div>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-success">Save</button>
+        <a href="/Team/List" class="btn btn-primary">Cancel</a>
+    </div>
+</form>

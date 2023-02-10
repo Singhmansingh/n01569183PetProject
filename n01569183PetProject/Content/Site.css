@@ -35,3 +35,15 @@ textarea {
     5
 
 */
+
+
+.popup {
+    padding: 20px;
+    background-color: white;
+    box-shadow: 3px 3px 5px #00000037;
+    position:fixed;
+    top: 50%;
+    left: 50%;
+    display:block;
+    transform: translate(-50%,-50%);
+}

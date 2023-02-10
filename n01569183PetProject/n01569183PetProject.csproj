@@ -184,6 +184,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\PlayerController.cs" />
     <Compile Include="Controllers\PlayerDataController.cs" />
     <Compile Include="Controllers\RoleController.cs" />
     <Compile Include="Controllers\RoleDataController.cs" />
@@ -287,6 +288,13 @@
     <Content Include="Views\Role\New.cshtml" />
     <Content Include="Views\Role\List.cshtml" />
     <Content Include="Views\Role\Show.cshtml" />
+    <Content Include="Views\Team\ConfirmDelete.cshtml" />
+    <Content Include="Views\Team\New.cshtml" />
+    <Content Include="Views\Role\ConfirmDelete.cshtml" />
+    <Content Include="Views\Player\New.cshtml" />
+    <Content Include="Views\Player\Show.cshtml" />
+    <Content Include="Views\Player\ConfirmDelete.cshtml" />
+    <Content Include="Views\Player\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

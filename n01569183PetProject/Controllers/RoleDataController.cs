@@ -18,6 +18,7 @@ namespace n01569183PetProject.Controllers
         public IEnumerable<Role> ListRoles()
         {
             List<Role> Roles = db.Roles.ToList();
+            Roles = Roles.OrderBy(role => role.TeamId).ToList();
 
             return Roles;
         }

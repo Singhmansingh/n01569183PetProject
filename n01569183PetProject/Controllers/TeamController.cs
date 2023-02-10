@@ -22,6 +22,11 @@ namespace n01569183PetProject.Controllers
             client.BaseAddress = new Uri("https://localhost:44391/api/");
         }
 
+        public ActionResult New()
+        {
+            return View();
+        }
+
         // GET: Team
         public ActionResult List()
         {
@@ -41,6 +46,44 @@ namespace n01569183PetProject.Controllers
             return View(Team);
 
         }
+
+        public ActionResult ConfirmDelete(int id)
+        {
+            string url = "TeamData/FindTeam/" + id;
+            HttpResponseMessage response = client.GetAsync(url).Result;
+            TeamDto Team = response.Content.ReadAsAsync<TeamDto>().Result;
+
+            return View(Team);
+        }
+
+        public ActionResult Delete(int TeamId)
+        {
+            string url = "TeamData/DeleteTeam/" + TeamId;
+            HttpResponseMessage response = client.GetAsync(url).Result;
+            return Redirect("/Team/List");
+        }
+
+        [HttpPost]
+        public ActionResult Add(string TeamName, string TeamWinCondition, string TeamDescription, string TeamColor)
+        {
+            string url = "TeamData/AddTeam";
+
+            Team Team = new Team()
+            {
+                TeamName = TeamName,
+                TeamWinCondition = TeamWinCondition,
+                TeamColor = TeamColor,
+                TeamDescription = TeamDescription,
+            };
+
+            string jsonpayload = jss.Serialize(Team);
+            HttpContent content = new StringContent(jsonpayload);
+            content.Headers.ContentType.MediaType = "application/json";
+            HttpResponseMessage response = client.PostAsync(url, content).Result;
+
+            return Redirect("/Team/List");
+        }
+
 
         public ActionResult Save(int TeamId, string TeamColor, string TeamName, string TeamWinCondition, string TeamDescription)
         {

@@ -2,9 +2,13 @@
 @{
     ViewBag.Title = "List";
 }
+<ol class="breadcrumb">
+    <li><a href="/">Home</a></li>
+    <li><a href="/Team/List">Teams</a></li>
+</ol>
 
 <h2>List</h2>
-
+<a class="btn btn-success" href="/Team/New">New Team</a>
 
 @foreach(var team in Model)
             {

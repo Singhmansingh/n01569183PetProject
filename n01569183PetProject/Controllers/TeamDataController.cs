@@ -21,6 +21,30 @@ namespace n01569183PetProject.Controllers
 
             return Teams;
         }
+
+        [HttpGet]
+        [Route("api/TeamData/ListTeamsWithRoles")]
+
+        public IEnumerable<TeamDto> ListTeamsWithRoles()
+        {
+            List<Team> Teams = db.Teams.ToList();
+            List<TeamDto> dtos = new List<TeamDto>();
+            foreach(Team team in Teams)
+            {
+                TeamDto TeamDto = new TeamDto()
+                {
+                    TeamName = team.TeamName,
+                    TeamDescription = team.TeamDescription,
+                    TeamId = team.TeamId,
+                    TeamColor = team.TeamColor,
+                    TeamRoles = db.Roles.Where(r => r.TeamId == team.TeamId).ToList()
+                };
+                dtos.Add(TeamDto);
+
+            }
+
+            return dtos;
+        }
         //AddTeam
         [HttpPost]
         public void AddTeam([FromBody] Team TeamData)

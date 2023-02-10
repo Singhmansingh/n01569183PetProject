@@ -2,11 +2,16 @@
 @{
     ViewBag.Title = "Show";
 }
+<ol class="breadcrumb">
+    <li><a href="/">Home</a></li>
+    <li><a href="/Team/List">Teams</a></li>
+    <li><a href="/Team/Show/@Model.TeamId">@Model.TeamName</a></li>
+</ol>
 
-<p>
+
+<div>
     <h2>@Model.TeamName Team</h2>
-    <a class="text-danger">Delete</a>
-</p>
+</div>
 
 
 
@@ -27,7 +32,7 @@
 
             <div class="form-group">
                 <label for="TeamDescirption">Description</label>
-                <textarea id="TeamDescirption" name="TeamDescription" class="form-control" style="min-width: 100%;"></textarea>
+                <textarea id="TeamDescirption" name="TeamDescription" class="form-control" style="min-width: 100%;">@Model.TeamDescription</textarea>
             </div>
         </div>
         <div class="col-md-6">
@@ -36,12 +41,17 @@
         </div>
     </div>
     <div class="form-group">
+        <button onclick="history.go(-1)" type="button" class="btn btn-default">Return</button>
+
+        <button class="btn btn-danger" type="button" onclick="confirmDeletion()">Delete</button>
         <button type="submit" class="btn btn-success">Save</button>
-        <button type="button" class="btn btn-primary">Cancel</button>
+
     </div>
 </form>
 
 <h2>@Model.TeamName Team Roles </h2><a href="/Role/New" class="btn btn-info">New Role</a>
+
+
 
 <table class="table table-striped">
     <thead>
@@ -64,3 +74,29 @@
 
 </table>
 
+<div id="DeleteConfirmationBox" class="popup hidden">
+    <p>Confirm Deletion Box</p>
+</div>
+
+
+<script>
+    function confirmDeletion() {
+        var xhr = new XMLHttpRequest();
+        xhr.open('get','/Team/ConfirmDelete/@Model.TeamId',true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                display('DeleteConfirmationBox', xhr.response);
+            }
+        }
+        xhr.send(null);
+    }
+
+    function display(id, content) {
+        document.getElementById(id).innerHTML = content;
+        document.getElementById(id).classList.remove('hidden');
+    }
+
+    function cancel(id) {
+        document.getElementById(id).classList.add('hidden');
+    }
+</script>

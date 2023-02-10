@@ -1,0 +1,113 @@
+﻿@model n01569183PetProject.Models.Player
+@{
+    ViewBag.Title = "Show";
+}
+
+
+<ol class="breadcrumb">
+    <li><a href="/">Home</a></li>
+    <li><a href="/Player/List">Players</a></li>
+    <li><a href="/Player/Show/@Model.PlayerId">@Model.PlayerName</a></li>
+</ol>
+
+
+<h2>@Model.PlayerName</h2>
+
+<form class="container" method="post" action="/Player/Save">
+    <input type="hidden" value="@Model.PlayerId" name="PlayerId" />
+    <input type="hidden" value="@Model.PlayerPassword" name="PlayerPassword" />
+    <input type="hidden" value="@Model.PlayerAlive" name="PlayerAlive" />
+    <input type="hidden" value="@Model.PlayerScore" name="PlayerScore" />
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="PlayerName" class="control-label">Name</label>
+                <input type="text" id="PlayerName" class="form-control" name="PlayerName" value="@Model.PlayerName" />
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label>Role</label>
+                <select name="RoleId" class="form-control">
+                    @{
+                        HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://localhost:44391/api/TeamData/ListTeamsWithRoles");
+                        HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                        var responseString = new StreamReader(response.GetResponseStream()).ReadToEnd();
+                        System.Web.Script.Serialization.JavaScriptSerializer js = new System.Web.Script.Serialization.JavaScriptSerializer();
+                        List<n01569183PetProject.Models.TeamDto> Teams = (List<n01569183PetProject.Models.TeamDto>)js.Deserialize(responseString, typeof(List<n01569183PetProject.Models.TeamDto>));
+                    }
+
+                    @foreach (n01569183PetProject.Models.TeamDto Team in Teams)
+                    {
+
+                        <optgroup label="@Team.TeamName">
+                            @foreach (var Role in Team.TeamRoles)
+                            {
+                                if (Role.RoleId == Model.RoleId)
+                                {
+                                    <option selected value="@Role.RoleId">@Role.RoleName</option>
+                                }
+                                else
+                                {
+                                    <option value="@Role.RoleId">@Role.RoleName</option>
+
+                                }
+                            }
+                        </optgroup>
+                    }
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="PlayerScore" class="control-label">Player Wins</label>
+                <input type="number" id="PlayerScore" class="form-control" name="PlayerScore" value="@Model.PlayerScore" />
+            </div>
+        </div>
+    </div>
+        <div class="form-group">
+            <button onclick="history.go(-1)" type="button" class="btn btn-default">Return</button>
+            <button type="button" class="btn btn-danger" onclick="confirmDeletion()">Delete</button>
+            <button type="submit" class="btn btn-success">Save</button>
+        </div>
+</form>
+
+
+<div id="DeleteConfirmationBox" class="popup hidden">
+    <p>Confirm Deletion Box</p>
+</div>
+
+
+<script>
+    window.onload = function () {
+        $('tr').on('click', function () {
+            console.log(this, "clicked");
+            $('tr').removeClass('info');
+            $(this).addClass('info');
+            $('#TeamId').val(parseInt($(this).attr('teamid')));
+
+        })
+    }
+        function confirmDeletion() {
+        var xhr = new XMLHttpRequest();
+        xhr.open('get','/Player/ConfirmDelete/@Model.PlayerId',true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                display('DeleteConfirmationBox', xhr.response);
+            }
+        }
+        xhr.send(null);
+    }
+
+    function display(id, content) {
+        document.getElementById(id).innerHTML = content;
+        document.getElementById(id).classList.remove('hidden');
+    }
+
+    function cancel(id) {
+        document.getElementById(id).classList.add('hidden');
+    }
+
+</script>
