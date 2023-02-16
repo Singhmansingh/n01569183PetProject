@@ -16,7 +16,7 @@
             <th>Player</th>
             <th>Team</th>
             <th>Role</th>
-            <th>Current State</th>
+            <th>Score</th>
             <th>Role Description</th>
         </tr>
     </thead>
@@ -35,16 +35,9 @@
                 </td>
 
                 <td>
-                    @if (Player.PlayerAlive == false)
-                    {
-                        <p class="text-success">Alive</p>
-                    }
-                    else
-                    {
-                        <p class="text-danger">Dead</p>
-
-                    }
+                    @Player.PlayerScore
                 </td>
+
 
                 <td>
                     @Player.Role.RoleDescription

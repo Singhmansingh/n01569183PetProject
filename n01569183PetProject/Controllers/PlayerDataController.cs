@@ -61,8 +61,10 @@ namespace n01569183PetProject.Controllers
 
         // TogglePlayerState
         [HttpGet]
-        public Player ToggleLiveSate(int PlayerId)
+        [Route("api/PlayerData/ToggleLiveState/{PlayerId}")]
+        public Player ToggleLiveState(int PlayerId)
         {
+            Debug.WriteLine(PlayerId);
             Player Player = FindPlayer(PlayerId);
             Player.PlayerAlive = !Player.PlayerAlive;
             Player = UpdatePlayer(PlayerId, Player);

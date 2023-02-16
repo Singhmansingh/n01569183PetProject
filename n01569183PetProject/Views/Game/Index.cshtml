@@ -1,0 +1,19 @@
+﻿@model n01569183PetProject.Models.Data
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+@foreach (var Team in @Model.Teams)
+{
+    <p>@Team.TeamName</p>
+}
+@foreach (var Role in @Model.Roles)
+{
+    <p>@Role.RoleName</p>
+}
+@foreach (var Player in @Model.Players)
+{
+    <p>@Player.PlayerName</p>
+}

@@ -44,6 +44,15 @@ namespace n01569183PetProject.Controllers
 
         }
 
+        public ActionResult ToggleState(int id)
+        {
+            string url = "PlayerData/ToggleLiveState/" + id;
+            HttpResponseMessage response = client.GetAsync(url).Result;
+
+            return Redirect("/Player/List");
+
+        }
+
         public ActionResult New()
         {
             string url = "TeamData/ListTeamsWithRoles";
@@ -56,7 +65,7 @@ namespace n01569183PetProject.Controllers
         {
             string url = "PlayerData/UpdatePlayer/" + Player.PlayerId;
             HttpContent content = Prepare(Player);
-            Debug.WriteLine(content);
+            Debug.WriteLine(Player.PlayerScore);
             HttpResponseMessage response = client.PostAsync(url, content).Result;
             return Redirect("/Player/list");
 
