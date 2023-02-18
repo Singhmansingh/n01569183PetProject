@@ -1,0 +1,99 @@
+﻿@model n01569183PetProject.Models.RoleDto
+@{
+    ViewBag.Title = "Show";
+}
+
+
+<ol class="breadcrumb">
+    <li><a href="/">Home</a></li>
+    <li><a href="/Role/List">Roles</a></li>
+    <li><a href="/Role/Show/@Model.RoleId">@Model.RoleName</a></li>
+</ol>
+
+
+<h2>@Model.RoleName</h2>
+<h4 style="color: @Model.TeamColor">@Model.TeamName</h4>
+
+<form class="container" method="post" action="/Role/Save">
+    <input type="hidden" value="@Model.RoleId" name="RoleId" />
+    <input type="hidden" value="@Model.TeamId" name="TeamId" id="TeamId" />
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="RoleName" class="control-label">Name</label>
+                <input type="text" id="RoleName" class="form-control" name="RoleName" value="@Model.RoleName" />
+            </div>
+
+            <div class="form-group">
+                <label for="RoleDescirption">Description</label>
+                <textarea id="RoleDescirption" name="RoleDescription" class="form-control" style="min-width: 100%;">@Model.RoleDescription</textarea>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Team</th>
+                        <th>Win Condition</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://localhost:44391/api/TeamData/GetTeams");
+                        HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                        var responseString = new StreamReader(response.GetResponseStream()).ReadToEnd();
+                        System.Web.Script.Serialization.JavaScriptSerializer js = new System.Web.Script.Serialization.JavaScriptSerializer();
+                        List<n01569183PetProject.Models.Team> Teams = (List<n01569183PetProject.Models.Team>)js.Deserialize(responseString, typeof(List<n01569183PetProject.Models.Team>));
+                    }
+
+                    @foreach (n01569183PetProject.Models.Team Team in Teams)
+                    {
+                        if (Team.TeamId == Model.TeamId)
+                        {
+                            <tr class="info" teamid="@Team.TeamId">
+                                <td>
+                                    <a href="/Team/Show/@Team.TeamId">@Team.TeamName</a>
+                                </td>
+                                <td>@Team.TeamWinCondition</td>
+                            </tr>
+                        }
+                        else
+                        {
+                            <tr teamid="@Team.TeamId">
+                                <td>
+                                    <a href="/Team/Show/@Team.TeamId">@Team.TeamName</a>
+                                </td>
+                                <td>@Team.TeamWinCondition</td>
+                            </tr>
+                        }
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="form-group">
+        <button onclick="history.go(-1)"  type="button"  class="btn btn-default">Return</button>
+        <button type="button" class="btn btn-danger" onclick="confirmDeletion()">Delete</button>
+        <button type="submit" class="btn btn-success">Save</button>
+    </div>
+</form>
+
+
+<div id="DeleteConfirmationBox" class="popup hidden">
+    <p>Confirm Deletion Box</p>
+</div>
+
+
+<script>
+    window.onload = function () {
+        $('tr').on('click', function () {
+            console.log(this, "clicked");
+            $('tr').removeClass('info');
+            $(this).addClass('info');
+            $('#TeamId').val(parseInt($(this).attr('teamid')));
+
+        })
+    }
+
+</script>

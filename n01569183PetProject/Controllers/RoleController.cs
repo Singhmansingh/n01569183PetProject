@@ -42,7 +42,16 @@ namespace n01569183PetProject.Controllers
 
             return View(Role);
 
-        }   
+        }
+        public ActionResult Update(int id)
+        {
+            string url = "RoleData/FindRoleWithTeam/" + id;
+            HttpResponseMessage response = client.GetAsync(url).Result;
+            RoleDto Role = response.Content.ReadAsAsync<RoleDto>().Result;
+
+            return View(Role);
+
+        }
 
         public ActionResult New()
         {

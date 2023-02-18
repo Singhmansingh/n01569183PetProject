@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Web;
@@ -23,21 +24,23 @@ namespace n01569183PetProject.Controllers
         public ActionResult Index()
         {
             string TeamURL = "TeamData/ListTeams";
-            string RoleURL = "RoleData/ListRoles";
-            string PlayerURL = "PlayerData/ListPlayers";
 
-            Data Data = new Data();
 
             HttpResponseMessage response = client.GetAsync(TeamURL).Result;
-            Data.Teams = response.Content.ReadAsAsync<IEnumerable<Team>>().Result;
+            IEnumerable<Team> Teams = response.Content.ReadAsAsync<IEnumerable<Team>>().Result;
 
-            response = client.GetAsync(RoleURL).Result;
-            Data.Roles = response.Content.ReadAsAsync<IEnumerable<Role>>().Result;
+            return View(Teams);
+        }
 
-            response = client.GetAsync(PlayerURL).Result;
-            Data.Players = response.Content.ReadAsAsync<IEnumerable<Player>>().Result;
+        public HttpContent GetTeamPlayers(int id)
+        {
+            string url = "PlayerData/GetPlayersByTeam" + id;
+            HttpResponseMessage response = client.GetAsync(url).Result;
+            IEnumerable<Player> Players = response.Content.ReadAsAsync<IEnumerable<Player>>().Result;
 
-            return View(Data);
+            HttpContent package = Prepare(Players);
+            return package;
+
         }
         private HttpContent Prepare(Object Data)
         {

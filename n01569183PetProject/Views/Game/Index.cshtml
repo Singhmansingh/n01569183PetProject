@@ -1,19 +1,104 @@
-﻿@model n01569183PetProject.Models.Data
+﻿@model IEnumerable<n01569183PetProject.Models.Team>
 @{
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2>Welcome to Mafia!</h2>
 
-@foreach (var Team in @Model.Teams)
-{
-    <p>@Team.TeamName</p>
-}
-@foreach (var Role in @Model.Roles)
-{
-    <p>@Role.RoleName</p>
-}
-@foreach (var Player in @Model.Players)
-{
-    <p>@Player.PlayerName</p>
-}
+<h1 id="Team"></h1>
+<p id="Wincon"></p>
+<div>
+    <button id="team_0" href="#" onclick="getPlayerList(0)" class="btn btn-primary">All</button>
+
+    @foreach (var Team in Model)
+    {
+        <button id="team_@Team.TeamId" href="#" onclick="getPlayerList(@Team.TeamId)" class="btn btn-primary">@Team.TeamName<span></span></button>
+    }
+</div>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Player Name</th>
+            <th>Alive?</th>
+            <th></th>
+            <th>Team</th>
+            <th>Role</th>
+            <th>Role Description</th>
+        </tr>
+    </thead>
+    <tbody id="players">
+    </tbody>
+</table>
+
+<script>
+    async function getPlayerList(teamId) {
+        if (teamId === 0) {
+            api("PlayerData/ListPlayers", (res) => {
+                gid("Team").innerHTML = "All";
+                gid("Wincon").innerHTML = "All players in the game.";
+                renderPlayerList(res, teamId);
+            });
+        } else {
+            api("PlayerData/ListPlayersForTeam/" + teamId, (res) => {
+                gid("Team").innerHTML = res[0].Role.Team.TeamName;
+                gid("Wincon").innerHTML = res[0].Role.Team.TeamWinCondition;
+                renderPlayerList(res, teamId);
+            });
+        }
+    }
+
+    async function api(endpoint, callback = () => { }) {
+        var url = location.origin + "/api/" + endpoint;
+        var xhr = new XMLHttpRequest();
+        xhr.open("get", url, true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    callback(JSON.parse(xhr.response));
+                }
+                else callback(null);;
+            }
+
+        }
+        xhr.send(null);
+    }
+
+    function gid(id) {
+        return document.getElementById(id);
+    }
+
+
+    function renderPlayerList(players, currentTeamId) {
+        if (!players) return;
+        gid("players").innerHTML = null;
+        console.log(players.filter(e => e.PlayerAlive == true).length <= 0);
+        if (players.filter(e => e.PlayerAlive == true).length <= 0) {
+            gid("team_" + currentTeamId).classList.remove("btn-primary");
+            gid("team_" + currentTeamId).classList.add("btn-danger");
+        } else {
+            gid("team_" + currentTeamId).classList.remove("btn-danger");
+            gid("team_" + currentTeamId).classList.add("btn-primary");
+            gid("team_" + currentTeamId).innerHTML;
+        }
+
+        players.forEach(player => {
+            var redHighlight = 'class = "danger"';
+            gid("players").innerHTML += `
+                <tr ${player.PlayerAlive ? null : redHighlight}>
+                    <td>${player.PlayerName}</td>
+                    <td>${player.PlayerAlive}</td>
+                    <td><button class="btn btn-primary" onclick="killOrRes(${player.PlayerId},${currentTeamId})">X</button></td>
+                    <td>${player.Role.RoleName}</td>
+                    <td style="color: ${player.Role.Team.TeamColor}">${player.Role.Team.TeamName}</td>
+                    <td colspan="5">${player.Role.RoleDescription}</td>
+                </tr>
+                `
+        })
+
+    }
+
+    function killOrRes(playerId, currentTeamId=0) {
+        api("PlayerData/ToggleLiveState/" + playerId, () => getPlayerList(currentTeamId));
+    }
+</script>

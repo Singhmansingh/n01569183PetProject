@@ -72,6 +72,14 @@ namespace n01569183PetProject.Controllers
         }
 
         [HttpGet]
+        [Route("api/PlayerData/ListPlayersForTeam/{TeamId}")]
+        public IEnumerable<Player> ListPlayersForTeam(int TeamId)
+        {
+            List<Player> Players = db.Players.Where(p => p.Role.TeamId == TeamId).ToList();
+            return Players;
+        }
+
+        [HttpGet]
         [Route("api/PlayerData/SetPlayerRole/{PlayerId}/{RoleId}")]
 
         public void SetPlayerRole(int PlayerId, int RoleId)
