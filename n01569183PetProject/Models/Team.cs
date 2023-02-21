@@ -14,6 +14,8 @@ namespace n01569183PetProject.Models
         public string TeamColor { get; set; }
         public string TeamDescription { get; set; }
         public string TeamWinCondition { get; set; }
+        public bool TeamHasImg { get; set; }
+        public string TeamImgExt { get; set; }
 
     }
 
@@ -24,6 +26,8 @@ namespace n01569183PetProject.Models
         public string TeamColor { get; set; }
         public string TeamDescription { get; set; }
         public string TeamWinCondition { get; set; }
+        public bool TeamHasImg { get; set; }
+        public string TeamImgExt { get; set; }
         public List<Role> TeamRoles { get; set; }
     }
 

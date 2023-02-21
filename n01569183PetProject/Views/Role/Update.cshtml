@@ -12,17 +12,36 @@
 
 
 <h2>@Model.RoleName</h2>
-<h4 style="color: @Model.TeamColor">@Model.TeamName</h4>
+<h4 style="color: @Model.Team.TeamColor">@Model.Team.TeamName</h4>
 
-<form class="container" method="post" action="/Role/Save">
-    <input type="hidden" value="@Model.RoleId" name="RoleId" />
-    <input type="hidden" value="@Model.TeamId" name="TeamId" id="TeamId" />
+<form class="container" method="post" action="/Role/Save" enctype="multipart/form-data">
+    <div style="display;none;">
+        <input type="hidden" value="@Model.RoleId" name="RoleId" />
+        <input type="hidden" value="@Model.Team.TeamId" name="TeamId" id="TeamId" />
+    </div>
+
     <div class="row">
         <div class="col-md-6">
-            <div class="form-group">
-                <label for="RoleName" class="control-label">Name</label>
-                <input type="text" id="RoleName" class="form-control" name="RoleName" value="@Model.RoleName" />
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="RoleName" class="control-label">Name</label>
+                        <input type="text" id="RoleName" class="form-control" name="RoleName" value="@Model.RoleName" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="RoleMaxCount" class="control-label">Max Amount of Role</label>
+                        <input type="number" min="0" id="RoleMaxCount" class="form-control" name="RoleMaxCount" value="@Model.RoleMaxCount" />
+                        <label>
+                            <input type="checkbox" onclick="toggleUnlimited(this)" />
+                            <span>Unlimited</span>
+                        </label>
+                    </div>
+
+                </div>
             </div>
+
 
             <div class="form-group">
                 <label for="RoleDescirption">Description</label>
@@ -38,17 +57,11 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @{
-                        HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://localhost:44391/api/TeamData/GetTeams");
-                        HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                        var responseString = new StreamReader(response.GetResponseStream()).ReadToEnd();
-                        System.Web.Script.Serialization.JavaScriptSerializer js = new System.Web.Script.Serialization.JavaScriptSerializer();
-                        List<n01569183PetProject.Models.Team> Teams = (List<n01569183PetProject.Models.Team>)js.Deserialize(responseString, typeof(List<n01569183PetProject.Models.Team>));
-                    }
 
-                    @foreach (n01569183PetProject.Models.Team Team in Teams)
+
+                    @foreach (n01569183PetProject.Models.Team Team in Model.Teams)
                     {
-                        if (Team.TeamId == Model.TeamId)
+                        if (Team.TeamId == Model.Team.TeamId)
                         {
                             <tr class="info" teamid="@Team.TeamId">
                                 <td>
@@ -72,9 +85,14 @@
             </table>
         </div>
     </div>
+    <div class="form-group row">
+        <div class="col-md-6 col-sm-12">
+            <label>Role Icon</label>
+            <input type="file" name="RoleIcon"  />
+        </div>
+    </div>
     <div class="form-group">
-        <button onclick="history.go(-1)"  type="button"  class="btn btn-default">Return</button>
-        <button type="button" class="btn btn-danger" onclick="confirmDeletion()">Delete</button>
+        <button onclick="history.go(-1)" type="button" class="btn btn-default">Return</button>
         <button type="submit" class="btn btn-success">Save</button>
     </div>
 </form>
@@ -94,6 +112,16 @@
             $('#TeamId').val(parseInt($(this).attr('teamid')));
 
         })
+    }
+
+    function toggleUnlimited(input) {
+        if (input.checked) {
+            gid("RoleMaxCount").value = 0;
+            gid("RoleMaxCount").disabled = true;
+        }
+        else {
+            gid("RoleMaxCount").disabled = false;
+        }
     }
 
 </script>

@@ -9,15 +9,33 @@
     <li><a href="/Role/List">Roles</a></li>
     <li><a href="/Role/Show/@Model.RoleId">@Model.RoleName</a></li>
 </ol>
+<h1>@Model.RoleName</h1>
+<h4 style="color: @Model.Team.TeamColor">@Model.Team.TeamName</h4>
 
-
-<h2>@Model.RoleName</h2>
-<h4 style="color: @Model.TeamColor">@Model.TeamName</h4>
+@{
+    if (Model.RoleHasImg)
+    {
+        <img src="~/Content/Images/Roles/@Model.RoleId.@Model.RoleImgExt" width="250" />
+    }
+}
+<h2>Description</h2>
 <p>@Model.RoleDescription</p>
+<h2>Uses</h2>
+@if(Model.RoleMaxCount > 0)
+            {
+                <p>This Role can be used @Model.RoleMaxCount time(s) per game.</p>
+            }
+else
+            {
+                <p>This Role is unlimited.</p>
+            }
 
 <div class="row">
+    <div class="form-group">
     <a href="/Role/Update/@Model.RoleId" class="btn btn-info">Edit</a>
+
     <button type="button" class="btn btn-danger" onclick="confirmDeletion()">Delete</button>
+    </div>
 </div>
 <div id="DeleteConfirmationBox" class="popup hidden">
     <p>Confirm Deletion Box</p>

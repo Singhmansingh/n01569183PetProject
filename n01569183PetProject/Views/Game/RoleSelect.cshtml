@@ -1,0 +1,28 @@
+﻿@model IEnumerable<n01569183PetProject.Models.TeamDto>
+@{
+    ViewBag.Title = "RoleSelect";
+    Layout = "";
+}
+
+<h2>Role Selection</h2>
+<form  name="TeamRoleForm" id="TeamRoleForm">
+    @foreach (var Team in Model)
+    {
+        <h2>@Team.TeamName</h2>
+        <div style="display:grid; grid-template-columns: repeat(5,1fr); gap: 3em; grid-auto-rows: 275px;">
+            @foreach (var Role in Team.TeamRoles)
+            {
+                <label class="card">
+                    <input type="checkbox" name="role_@Role.RoleId" value="@Role.RoleId" checked="@Role.RoleInPlay"/>
+                    <img src="~/Content/Images/Roles/@Role.RoleId.@Role.RoleImgExt" style="max-width:100%;" />
+                    <span style="text-align:center; display:block; margin: 0.2em 0;">@Role.RoleName</span>
+                </label>
+            }
+        </div>
+    }
+    <div class="form-group" style="position: sticky; bottom: 0; display:flex; justify-content:flex-end; gap: 1em;">
+        <button type="button" onclick="cancelPopup()" class="btn btn-danger">Close</button>
+        <button type="button" class="btn btn-primary" onclick="saveRoleSelection()">Select</button>
+    </div>
+</form>
+

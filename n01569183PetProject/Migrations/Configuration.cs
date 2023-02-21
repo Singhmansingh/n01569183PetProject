@@ -9,7 +9,8 @@ namespace n01569183PetProject.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationsEnabled = true;
+            AutomaticMigrationDataLossAllowed = true;
         }
 
         protected override void Seed(n01569183PetProject.Models.ApplicationDbContext context)

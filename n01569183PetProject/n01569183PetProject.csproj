@@ -210,6 +210,26 @@
     <Compile Include="Migrations\202302032213430_RoleDescription.designer.cs">
       <DependentUpon>202302032213430_RoleDescription.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202302181548377_RoleImg.cs" />
+    <Compile Include="Migrations\202302181548377_RoleImg.designer.cs">
+      <DependentUpon>202302181548377_RoleImg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202302181624556_RoleExt.cs" />
+    <Compile Include="Migrations\202302181624556_RoleExt.designer.cs">
+      <DependentUpon>202302181624556_RoleExt.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202302181801013_TeamImg.cs" />
+    <Compile Include="Migrations\202302181801013_TeamImg.designer.cs">
+      <DependentUpon>202302181801013_TeamImg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202302202256494_AddRoleMaxCount.cs" />
+    <Compile Include="Migrations\202302202256494_AddRoleMaxCount.designer.cs">
+      <DependentUpon>202302202256494_AddRoleMaxCount.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202302210014013_AddRoleInPlay.cs" />
+    <Compile Include="Migrations\202302210014013_AddRoleInPlay.designer.cs">
+      <DependentUpon>202302210014013_AddRoleInPlay.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ViewModels\Data.cs" />
@@ -218,6 +238,7 @@
     <Compile Include="Models\Player.cs" />
     <Compile Include="Models\Role.cs" />
     <Compile Include="Models\Team.cs" />
+    <Compile Include="Models\ViewModels\TeamPlayers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -299,6 +320,9 @@
     <Content Include="Views\Player\List.cshtml" />
     <Content Include="Views\Game\Index.cshtml" />
     <Content Include="Views\Role\Update.cshtml" />
+    <Content Include="Views\Team\Update.cshtml" />
+    <Content Include="Views\Game\Player.cshtml" />
+    <Content Include="Views\Game\RoleSelect.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -320,6 +344,21 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202302032213430_RoleDescription.resx">
       <DependentUpon>202302032213430_RoleDescription.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202302181548377_RoleImg.resx">
+      <DependentUpon>202302181548377_RoleImg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202302181624556_RoleExt.resx">
+      <DependentUpon>202302181624556_RoleExt.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202302181801013_TeamImg.resx">
+      <DependentUpon>202302181801013_TeamImg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202302202256494_AddRoleMaxCount.resx">
+      <DependentUpon>202302202256494_AddRoleMaxCount.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202302210014013_AddRoleInPlay.resx">
+      <DependentUpon>202302210014013_AddRoleInPlay.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

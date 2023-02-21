@@ -15,6 +15,8 @@ namespace n01569183PetProject.Controllers
         public ApplicationDbContext db = new ApplicationDbContext();
         //ListPlayers
         [HttpGet]
+        [Route("api/PlayerData/ListPlayers")]
+
         public IEnumerable<Player> ListPlayers()
         {
             List<Player> Players = db.Players.ToList();
@@ -38,6 +40,28 @@ namespace n01569183PetProject.Controllers
 
             return FoundPlayer;
         }
+
+        //FindPlayer
+        [HttpGet]
+        [Route("api/PlayerData/FindPlayerByName/{PlayerName}")]
+        public Player FindPlayerByName(string PlayerName)
+        {
+            Player FoundPlayer = new Player();
+
+            try
+            {
+               FoundPlayer = db.Players.Where(player=>player.PlayerName==PlayerName).First();
+            }
+            catch
+            {
+                return null;
+            }
+
+            return FoundPlayer;
+        }
+
+
+
 
         //DeletePlayer
         [HttpGet]
@@ -87,6 +111,36 @@ namespace n01569183PetProject.Controllers
             Player Player = FindPlayer(PlayerId);
             Player.RoleId = RoleId;
             UpdatePlayer(PlayerId,Player);
+        }
+
+        [HttpGet]
+        [Route("api/PlayerData/ShufflePlayerRoles")]
+        public IEnumerable<Player> ShufflePlayerRoles()
+        {
+            List<Role> Roles = db.Roles.Where(Role => Role.RoleInPlay).ToList();
+            IEnumerable<Player> Players = db.Players.ToList();
+            //src : https://stackoverflow.com/questions/108819/best-way-to-randomize-an-array-with-net
+            var rng = new Random();
+
+            foreach (Player player in Players)
+            {
+                int index = rng.Next(0, Roles.Count());
+
+                SetPlayerRole(player.PlayerId, Roles[index].RoleId);
+                Debug.WriteLine("Currently at index " + index + " with Role " + Roles[index].RoleName);
+                int CurrentRoleId = Roles[index].RoleId;
+                List<Player> PlayersUsingThisRole = db.Players.Where(p => p.RoleId == CurrentRoleId).ToList();
+                Debug.WriteLine("Currently at index " + index + " with Role " + Roles[index].RoleName + ". " + PlayersUsingThisRole.Count() + "players have this role.");
+
+                if (Roles[index].RoleMaxCount > 0 && PlayersUsingThisRole.Count() >= Roles[index].RoleMaxCount)
+                {
+                    Debug.WriteLine("Removing at index " + index + " Role " + Roles[index].RoleName);
+                    Roles.RemoveAt(index);
+                }
+
+            }
+
+            return db.Players.ToList();
         }
     }
 }

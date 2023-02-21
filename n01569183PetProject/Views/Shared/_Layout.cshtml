@@ -39,8 +39,80 @@
         </footer>
     </div>
 
+    <div id="PopupBox" class="popup hidden">
+        <p>Popup Box</p>
+    </div>
+
+
+
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+<script>
+        function gid(id) {
+            return document.getElementById(id);
+        }
+
+        async function api(endpoint, callback = () => { }) {
+            var url = location.origin + "/api/" + endpoint;
+            var xhr = new XMLHttpRequest();
+            xhr.open("get", url, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        callback(JSON.parse(xhr.response));
+                    }
+                    else callback(null);;
+                }
+
+            }
+            xhr.send(null);
+        }
+
+        async function apip(endpoint, payload, callback = () => { }) {
+            var url = location.origin + "/api/" + endpoint;
+            var xhr = new XMLHttpRequest();
+
+            xhr.open("post", url, true);
+
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        var response;
+                        try {
+                            response = JSON.parse(xhr.response);
+                        } catch {
+                            response = null;
+                        }
+                        callback(response);
+                    }
+                    else callback(null);;
+                }
+
+            }
+            xhr.send(JSON.stringify(payload));
+        }
+
+        function popup(url) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('get',url,true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                display('PopupBox', xhr.response);
+            }
+        }
+        xhr.send(null);
+    }
+
+        function display(id, content) {
+            document.getElementById(id).innerHTML = content;
+            document.getElementById(id).classList.remove('hidden');
+        }
+
+        function cancelPopup() {
+            document.getElementById("PopupBox").classList.add('hidden');
+        }
+</script>
 </body>
 </html>

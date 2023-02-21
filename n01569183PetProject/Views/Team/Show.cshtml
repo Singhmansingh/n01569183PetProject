@@ -7,47 +7,44 @@
     <li><a href="/Team/List">Teams</a></li>
     <li><a href="/Team/Show/@Model.TeamId">@Model.TeamName</a></li>
 </ol>
+<div class="row">
+    <div class="col-md-6">
+        <h1>Team <span style="color: @Model.TeamColor">@Model.TeamName</span></h1>
 
-
-<div>
-    <h2>@Model.TeamName Team</h2>
+    </div>
 </div>
 
+<div class="form-group row">
+    <div class="col-md-3 col-sm-12">
+        @{
+            string src;
+            if (Model.TeamHasImg)
+            {
+                src = @Model.TeamId + "." + Model.TeamImgExt;
+            }
+            else
+            {
+                src = "default.jpg";
+            }
+            <img src="~/Content/Images/Teams/@src" style="max-width:100%;" />
 
+        }
+    </div>
+    <div class="col-md-9 col-sm-12">
+        <h2>Description</h2>
+        <p>@Model.TeamDescription</p>
+        <h2>Win Condition</h2>
+        <p>@Model.TeamWinCondition</p>
+        <div class="form-group">
 
-<form class="container" method="post" action="/Team/Save">
-    <input type="hidden" value="@Model.TeamId" name="TeamId" />
-    <div class="row">
-        <div class="col-md-6">
-            <div class="row">
-                <div class="col-md-6 form-group">
-                    <label for="TeamName" class="control-label">Name</label>
-                    <input type="text" id="TeamName" class="form-control" name="TeamName" value="@Model.TeamName" />
-                </div>
-                <div class="col-md-6 form-group">
-                    <label for="TeamColor">Color</label>
-                    <input id="TeamColor" class="form-control" type="color" name="TeamColor" value="@Model.TeamColor" />
-                </div>
-            </div>
+            <a href="/Team/Update/@Model.TeamId" class="btn btn-primary">Edit</a>
+            <button class="btn btn-danger" type="button" onclick="confirmDeletion()">Delete</button>
 
-            <div class="form-group">
-                <label for="TeamDescirption">Description</label>
-                <textarea id="TeamDescirption" name="TeamDescription" class="form-control" style="min-width: 100%;">@Model.TeamDescription</textarea>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <label for="WinCondition">Win Condition</label>
-            <textarea id="WinCondition" name="TeamWinCondition" class="form-control " rows="6" style="min-width: 100%; min-height: initial;">@Model.TeamWinCondition</textarea>
         </div>
     </div>
-    <div class="form-group">
-        <button onclick="history.go(-1)" type="button" class="btn btn-default">Return</button>
 
-        <button class="btn btn-danger" type="button" onclick="confirmDeletion()">Delete</button>
-        <button type="submit" class="btn btn-success">Save</button>
+</div>
 
-    </div>
-</form>
 
 <h2>@Model.TeamName Team Roles </h2><a href="/Role/New" class="btn btn-info">New Role</a>
 

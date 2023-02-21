@@ -1,0 +1,73 @@
+﻿
+@{
+    ViewBag.Title = "Player";
+}
+
+<div style="display:none;">
+    <form method="get" class="form-inline" id="SearchForm" name="SearchForm">
+        <div class="form-group">
+            <label>Name</label>
+            <input name="name" class="form-control" id="fName" />
+        </div>
+        <input class="form-control btn btn-primary" id="Search" type="submit" value="Search" />
+    </form>
+</div>
+
+
+<div id="output" class="hide" style="text-align:center;">
+    <h1 id="PlayerName">Something</h1>
+    <hr />
+
+
+    <div class="img-container" style="display:inline-flex; justify-content:center;"><img id="TeamIcon" src="~/Content/Images/Teams/default.jpg" width="150" /></div>
+
+    <h2><span id="TeamName">Good</span> - <span id="RoleName">Civillian</span></h2>
+    <p>You are <span id="PlayerAlive">Alive</span></p>
+
+    <h3>Your Ability</h3>
+    <p id="RoleDescription">lorem ipsum dollar sit amet.</p>
+    <h3>Your Goal</h3>
+    <p id="TeamWinCondition">lorem ipsum dollar sit amet.</p>
+</div>
+<script>
+    window.onload = function () {
+        const q = location.search;
+        const params = new URLSearchParams(q);
+        const name = params.get("name");
+        FindPlayerByName(name);
+    }
+
+    function FindPlayerByName(q) {
+        api("PlayerData/FindPlayerByName/" + q, (res) => {
+            if (!res) renderNoPlayer();
+            else renderPlayer(res);
+        })
+    }
+
+    function renderNoPlayer() {
+        gid("output").classList.add("hide");
+    }
+
+    function renderPlayer(player) {
+        set("PlayerName", player.PlayerName);
+        set("RoleName", player.Role.RoleName);
+
+        set("TeamName", player.Role.Team.TeamName);
+        gid("TeamName").style.color = player.Role.Team.TeamColor;
+        var src = "/Content/Images/Roles/default.png";
+        if (player.Role.RoleHasImg) {
+            src = "/Content/Images/Roles/" + player.Role.RoleId + "." + player.Role.RoleImgExt
+        }
+        gid("TeamIcon").src = src;
+        set("PlayerAlive", player.PlayerAlive ? "Alive" : "Dead" );
+
+        set("TeamWinCondition", player.Role.Team.TeamWinCondition);
+        set("RoleDescription", player.Role.RoleDescription);
+        gid("output").classList.remove("hide");
+
+    }
+
+    function set(id, value) {
+        gid(id).innerHTML = `${value}`;
+    }
+</script>

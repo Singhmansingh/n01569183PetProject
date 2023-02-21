@@ -47,6 +47,16 @@ namespace n01569183PetProject.Controllers
 
         }
 
+        public ActionResult Update(int id)
+        {
+            string url = "TeamData/FindTeamWithRoles/" + id;
+            HttpResponseMessage response = client.GetAsync(url).Result;
+            TeamDto Team = response.Content.ReadAsAsync<TeamDto>().Result;
+
+            return View(Team);
+
+        }
+
         public ActionResult ConfirmDelete(int id)
         {
             string url = "TeamData/FindTeam/" + id;
@@ -85,24 +95,31 @@ namespace n01569183PetProject.Controllers
         }
 
 
-        public ActionResult Save(int TeamId, string TeamColor, string TeamName, string TeamWinCondition, string TeamDescription)
+        public ActionResult Save(Team Team, HttpPostedFileBase TeamIcon)
         {
-            Team Team = new Team()
-            {
-                TeamId = TeamId,
-                TeamColor = TeamColor,
-                TeamName = TeamName,
-                TeamDescription = TeamDescription,
-                TeamWinCondition = TeamWinCondition
-            };
+
+        
             string jsonpayload = jss.Serialize(Team);
             HttpContent content = new StringContent(jsonpayload);
             content.Headers.ContentType.MediaType = "application/json";
-            string url = "TeamData/UpdateTeam/" + TeamId;
+            string url = "TeamData/UpdateTeam/" + Team.TeamId;
             HttpResponseMessage response = client.PostAsync(url, content).Result;
 
 
-            return Redirect("List");
+            if (TeamIcon != null)
+            {
+                Debug.Write("Uploading Team image...");
+                url = "TeamData/UploadTeamImg/" + Team.TeamId;
+
+                MultipartFormDataContent requestcontent = new MultipartFormDataContent();
+                HttpContent imagecontent = new StreamContent(TeamIcon.InputStream);
+                requestcontent.Add(imagecontent, "teamImg", TeamIcon.FileName);
+                response = client.PostAsync(url, requestcontent).Result;
+
+            }
+
+
+            return Redirect("Show/"+ Team.TeamId);
         }
     }
 }

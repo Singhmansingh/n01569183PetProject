@@ -1,78 +1,124 @@
-﻿@model IEnumerable<n01569183PetProject.Models.Team>
+﻿@model IEnumerable<n01569183PetProject.Models.ViewModels.TeamPlayers>
 @{
     ViewBag.Title = "Index";
 }
 
 <h2>Welcome to Mafia!</h2>
 
-<h1 id="Team"></h1>
-<p id="Wincon"></p>
+<div class="row">
+    <div class="col-md-1" style="display:flex;align-items:center; height:100%;" id="TeamIconContainer">
+        <img id="TeamIcon" style="max-width:100%;"/>
+    </div>
+    <div class="col-md-11">
+        <h1 id="Team"></h1>
+        <p id="Wincon"></p>
+    </div>
+</div>
+
 <div>
     <button id="team_0" href="#" onclick="getPlayerList(0)" class="btn btn-primary">All</button>
 
-    @foreach (var Team in Model)
+    @foreach (var teamPlayers in Model)
     {
-        <button id="team_@Team.TeamId" href="#" onclick="getPlayerList(@Team.TeamId)" class="btn btn-primary">@Team.TeamName<span></span></button>
+        <button id="team_@teamPlayers.Team.TeamId" href="#" onclick="getPlayerList(@teamPlayers.Team.TeamId)" class="btn btn-primary">@teamPlayers.Team.TeamName<span></span></button>
     }
 </div>
 
-<table class="table table-hover">
+<table class="table table-striped">
     <thead>
         <tr>
-            <th>Player Name</th>
-            <th>Alive?</th>
-            <th></th>
+            <th>Kill/Res</th>
+            <th>Player</th>
             <th>Team</th>
-            <th>Role</th>
-            <th>Role Description</th>
+            <th style="width: 20%;">Role</th>
+            <th style="width: 50%;">Role Description</th>
         </tr>
     </thead>
     <tbody id="players">
     </tbody>
 </table>
+<div class="form-group">
+    <button id="reroll" onclick="popup('/Game/RoleSelect')" class="btn btn-primary">Select Roles</button>
+    <button id="reroll" onclick="randomizeRoles()" class="btn btn-warning">Randomize Roles</button>
+
+</div>
+
 
 <script>
+    window.onload = function () {
+        getPlayerList(0);
+    }
     async function getPlayerList(teamId) {
         if (teamId === 0) {
             api("PlayerData/ListPlayers", (res) => {
                 gid("Team").innerHTML = "All";
                 gid("Wincon").innerHTML = "All players in the game.";
+                gid("TeamIconContainer").classList.add("hide");
                 renderPlayerList(res, teamId);
             });
         } else {
             api("PlayerData/ListPlayersForTeam/" + teamId, (res) => {
                 gid("Team").innerHTML = res[0].Role.Team.TeamName;
                 gid("Wincon").innerHTML = res[0].Role.Team.TeamWinCondition;
+                if (res[0].Role.Team.TeamHasImg) {
+                    gid("TeamIcon").src = "/Content/Images/Teams/" + res[0].Role.Team.TeamId + "." + res[0].Role.Team.TeamImgExt;
+                    gid("TeamIconContainer").classList.remove("hide");
+
+                }
+                else {
+                    gid("TeamIconContainer").classList.add("hide");
+
+                }
                 renderPlayerList(res, teamId);
             });
         }
     }
-
-    async function api(endpoint, callback = () => { }) {
-        var url = location.origin + "/api/" + endpoint;
-        var xhr = new XMLHttpRequest();
-        xhr.open("get", url, true);
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4) {
-                if (xhr.status === 200) {
-                    callback(JSON.parse(xhr.response));
-                }
-                else callback(null);;
-            }
-
-        }
-        xhr.send(null);
+    function setRole(selectBox, playerId,teamId) {
+        console.log(selectBox.value, playerId);
+        api(`PlayerData/SetPlayerRole/${playerId}/${selectBox.value}`, (res) => {
+            getPlayerList(teamId);
+        })
     }
 
-    function gid(id) {
-        return document.getElementById(id);
+    async function renderRoleSelectList(roleElement, currentRoleId, playerId, teamId) {
+        if (roleElement.querySelectorAll("select").length > 0) return;
+        var res = await api("TeamData/ListTeamsWithRoles", (res) => {
+
+            var selectBox = `<select class="form-control table-select" onchange="setRole(this,${playerId},${teamId})" onfocusout="getPlayerList(${teamId})">`;
+
+            res.forEach(team => {
+                selectBox += `<optgroup label="${team.TeamName}">`;
+                team.TeamRoles.forEach(role => {
+                    if (!role.RoleInPlay) return;
+                    if (role.RoleId === currentRoleId) {
+
+                        selectBox += `<option value="${role.RoleId}" selected>${role.RoleName}</option>`
+                    }
+                    else {
+                        selectBox += `<option value="${role.RoleId}">${role.RoleName}</option>`
+
+                    }
+                })
+                selectBox += `</optgroup>`;
+            })
+
+            selectBox += "</select>";
+
+            roleElement.innerHTML = selectBox;
+        })
+    }
+
+    async function randomizeRoles(){
+        api("PlayerData/ShufflePlayerRoles", (res) => {
+            getPlayerList(0);
+        })
     }
 
 
-    function renderPlayerList(players, currentTeamId) {
+
+     function renderPlayerList(players, currentTeamId) {
         if (!players) return;
         gid("players").innerHTML = null;
-        console.log(players.filter(e => e.PlayerAlive == true).length <= 0);
         if (players.filter(e => e.PlayerAlive == true).length <= 0) {
             gid("team_" + currentTeamId).classList.remove("btn-primary");
             gid("team_" + currentTeamId).classList.add("btn-danger");
@@ -81,16 +127,14 @@
             gid("team_" + currentTeamId).classList.add("btn-primary");
             gid("team_" + currentTeamId).innerHTML;
         }
-
         players.forEach(player => {
             var redHighlight = 'class = "danger"';
             gid("players").innerHTML += `
                 <tr ${player.PlayerAlive ? null : redHighlight}>
-                    <td>${player.PlayerName}</td>
-                    <td>${player.PlayerAlive}</td>
-                    <td><button class="btn btn-primary" onclick="killOrRes(${player.PlayerId},${currentTeamId})">X</button></td>
-                    <td>${player.Role.RoleName}</td>
+                    <td><button class="btn ${player.PlayerAlive ? 'btn-danger' : 'btn-success'}" onclick="killOrRes(${player.PlayerId},${currentTeamId})">${player.PlayerAlive ? '&#9760;' : '&#9764;'}</button></td>
+                    <td><a href="/Game/Player?name=${player.PlayerName}">${player.PlayerName}</a></td>
                     <td style="color: ${player.Role.Team.TeamColor}">${player.Role.Team.TeamName}</td>
+                    <td onclick="renderRoleSelectList(this,${player.RoleId},${player.PlayerId},${currentTeamId})">${player.Role.RoleName}</td>
                     <td colspan="5">${player.Role.RoleDescription}</td>
                 </tr>
                 `
@@ -98,7 +142,19 @@
 
     }
 
-    function killOrRes(playerId, currentTeamId=0) {
+    function killOrRes(playerId, currentTeamId = 0) {
         api("PlayerData/ToggleLiveState/" + playerId, () => getPlayerList(currentTeamId));
+    }
+
+    function saveRoleSelection() {
+        var selectedElements = document.querySelectorAll('input[type="checkbox"]:checked');
+        var ids = [];
+        selectedElements.forEach(el => {
+            ids.push(parseInt(el.value));
+        })
+        console.log(ids);
+        apip("RoleData/UseRoles", { RoleIds: ids }, () => {
+            cancelPopup();
+        })
     }
 </script>

@@ -1,4 +1,5 @@
 ﻿using System;
+
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -14,6 +15,11 @@ namespace n01569183PetProject.Models
         public string RoleName { get; set; }
         public string RoleDescription { get; set; }
 
+        public bool RoleHasImg { get; set; }
+        public string RoleImgExt { get; set; }
+        public int RoleMaxCount { get; set; }
+        public bool RoleInPlay { get; set; }
+
         [ForeignKey("Team")]
         public int TeamId { get; set; }
         public virtual Team Team { get; set; }
@@ -25,8 +31,18 @@ namespace n01569183PetProject.Models
         public int RoleId { get; set; }
         public string RoleName { get; set; }
         public string RoleDescription { get; set; }
-        public int TeamId { get; set; }
-        public string TeamColor { get; set; }
-        public string TeamName { get; set; }
+        public int RoleMaxCount { get; set; }
+        public bool RoleInPlay { get; set; }
+
+
+        public Team Team { get; set; }  
+        public IEnumerable<Team> Teams { get; set; }
+        public bool RoleHasImg { get; set; }
+        public string RoleImgExt { get; set; }
+    }
+
+    public class RoleIdSet
+    {
+        public int[] RoleIds { get; set; }
     }
 }
