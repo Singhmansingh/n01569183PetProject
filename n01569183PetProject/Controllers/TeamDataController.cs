@@ -11,6 +11,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web;
 using System.Web.Http;
+using System.Web.Routing;
 
 namespace n01569183PetProject.Controllers
 {
@@ -197,7 +198,12 @@ namespace n01569183PetProject.Controllers
         [Route("api/TeamData/UpdateTeam/{TeamId}")]
         public Team UpdateTeam(int TeamId, [FromBody] Team TeamData)
         {
-            Debug.Write("TeamData:"+(TeamData.TeamWinCondition));
+            Team FoundTeam = db.Teams.Find(TeamId);
+            if (FoundTeam != null)
+            {
+                if (!TeamData.TeamHasImg) TeamData.TeamHasImg = FoundTeam.TeamHasImg;
+                if (TeamData.TeamImgExt == null) TeamData.TeamImgExt = FoundTeam.TeamImgExt;
+            }
             db.Teams.AddOrUpdate(TeamData);
             db.SaveChanges();
 

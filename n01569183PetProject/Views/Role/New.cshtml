@@ -11,7 +11,7 @@
 
 <h2>New Role</h2>
 
-<form class="container" method="post" id="NewRoleForm" action="/Role/Submit">
+<form class="container" method="post" id="NewRoleForm" action="/Role/Save">
     <input type="hidden" name="TeamId" id="TeamId" required />
     <div class="row">
         <div class="col-md-6">
@@ -34,15 +34,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @{
-                        HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://localhost:44391/api/TeamData/GetTeams");
-                        HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                        var responseString = new StreamReader(response.GetResponseStream()).ReadToEnd();
-                        System.Web.Script.Serialization.JavaScriptSerializer js = new System.Web.Script.Serialization.JavaScriptSerializer();
-                        List<n01569183PetProject.Models.Team> Teams = (List<n01569183PetProject.Models.Team>)js.Deserialize(responseString, typeof(List<n01569183PetProject.Models.Team>));
-                    }
 
-                    @foreach (n01569183PetProject.Models.Team Team in Teams)
+                    @foreach (var Team in Model)
                     {
 
                         <tr teamid="@Team.TeamId">

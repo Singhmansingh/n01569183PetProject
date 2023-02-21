@@ -50,6 +50,7 @@ namespace n01569183PetProject.Controllers
         public RoleDto FindRole(int RoleId)
         {
             Role FoundRole = db.Roles.Find(RoleId);
+            if (FoundRole == null) return null;
             RoleDto dto = new RoleDto()
             {
                 RoleId = FoundRole.RoleId,
@@ -82,9 +83,13 @@ namespace n01569183PetProject.Controllers
         public RoleDto UpdateRole(int RoleId, [FromBody] Role RoleData)
         {
             Role FoundRole = db.Roles.Find(RoleId);
-            if (!RoleData.RoleHasImg) RoleData.RoleHasImg = FoundRole.RoleHasImg;
-            if (RoleData.RoleImgExt == null) RoleData.RoleImgExt = FoundRole.RoleImgExt;
-            if (!RoleData.RoleInPlay) RoleData.RoleInPlay = FoundRole.RoleInPlay;
+            if (FoundRole != null)
+            {
+                if (!RoleData.RoleHasImg) RoleData.RoleHasImg = FoundRole.RoleHasImg;
+                if (RoleData.RoleImgExt == null) RoleData.RoleImgExt = FoundRole.RoleImgExt;
+                if (!RoleData.RoleInPlay) RoleData.RoleInPlay = FoundRole.RoleInPlay;
+            }
+
             
             db.Roles.AddOrUpdate(RoleData);
             db.SaveChanges();
