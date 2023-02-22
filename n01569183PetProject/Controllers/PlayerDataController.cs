@@ -7,44 +7,93 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Description;
 
 namespace n01569183PetProject.Controllers
 {
     public class PlayerDataController : ApiController
     {
         public ApplicationDbContext db = new ApplicationDbContext();
-        //ListPlayers
+        
+
+        /// <summary>
+        /// List all players in the Database
+        /// </summary>
+        /// <returns>
+        /// HEADER: 200 (OK)
+        /// CONTENT: List of all Players in the Database
+        /// </returns>
+        /// <example>
+        /// GET: /api/PlayerData/ListPlayers
+        /// </example>
         [HttpGet]
         [Route("api/PlayerData/ListPlayers")]
-
-        public IEnumerable<Player> ListPlayers()
+        [ResponseType(typeof(Player))]
+        public IHttpActionResult ListPlayers()
         {
             List<Player> Players = db.Players.ToList();
 
-            return Players;
+            return Ok(Players);
         }
-        //AddPlayer
+
+
+        /// <summary>
+        /// Add a new Player
+        /// </summary>
+        /// <returns>
+        /// HEADER: 200 (OK)
+        /// </returns>
+        /// <param name="PlayerData">Player. New Player Data.</param>
+        /// <example>
+        /// POST: /api/PlayerData/AddPlayer
+        /// BODY: PlayerData
+        /// </example>
         [HttpPost]
-        public void AddPlayer([FromBody] Player PlayerData)
+        public IHttpActionResult AddPlayer([FromBody] Player PlayerData)
         {
             Debug.Write(PlayerData.PlayerName);
             db.Players.Add(PlayerData);
             db.SaveChanges();
+            return Ok();
         }
-        //FindPlayer
+
+
+        /// <summary>
+        /// Finds a specific Player by Id
+        /// </summary>
+        /// <returns>
+        /// HEADER: 200 (OK)
+        /// CONTENT: Player Data with the specified ID
+        /// </returns>
+        /// <param name="PlayerId">Integer. ID of the Player.</param>
+        /// <example>
+        /// GET: /api/PlayerData/FindPlayer/2
+        /// </example>          
         [HttpGet]
         [Route("api/PlayerData/FindPlayer/{PlayerId}")]
-        public Player FindPlayer(int PlayerId)
+        [ResponseType(typeof(Player))]
+        public IHttpActionResult FindPlayer(int PlayerId)
         {
             Player FoundPlayer = db.Players.Find(PlayerId);
 
-            return FoundPlayer;
+            return Ok(FoundPlayer);
         }
 
-        //FindPlayer
+        /// <summary>
+        /// Finds a specific Player by Name
+        /// </summary>
+        /// <returns>
+        /// HEADER: 200 (OK)
+        /// CONTENT: Player Data with the specified Name
+        /// </returns>
+        /// <param name="PlayerName">String. Name of the Player.</param>
+        /// <example>
+        /// GET: /api/PlayerData/FindPlayer/John
+        /// </example>          
         [HttpGet]
         [Route("api/PlayerData/FindPlayerByName/{PlayerName}")]
-        public Player FindPlayerByName(string PlayerName)
+        [ResponseType(typeof(Player))]
+        public IHttpActionResult FindPlayerByName(string PlayerName)
         {
             Player FoundPlayer = new Player();
 
@@ -54,68 +103,136 @@ namespace n01569183PetProject.Controllers
             }
             catch
             {
-                return null;
+                return BadRequest();
             }
 
-            return FoundPlayer;
+            return Ok(FoundPlayer);
         }
 
-
-
-
-        //DeletePlayer
+        /// <summary>
+        /// Removes a specific Player from the Database
+        /// </summary>
+        /// <returns>
+        /// HEADER: 200 (OK)
+        /// </returns>
+        /// <param name="PlayerId">Integer. ID of the Player.</param>
+        /// <example>
+        /// GET: /api/PlayerData/DeletePlayer/2
+        /// </example>     
         [HttpGet]
         [Route("api/PlayerData/DeletePlayer/{PlayerId}")]
-        public bool DeletePlayer(int PlayerId)
+        public IHttpActionResult DeletePlayer(int PlayerId)
         {
-            Player FoundPlayer = FindPlayer(PlayerId);
+            Player FoundPlayer = db.Players.Find(PlayerId);
             db.Players.Remove(FoundPlayer);
             db.SaveChanges();
-            return true;
+            return Ok();
         }
-        //UpdatePlayer
+
+
+        /// <summary>
+        /// Updates the data for a specific Player.
+        /// </summary>
+        /// <returns>
+        /// HEADER: 200 (OK)
+        /// </returns>
+        /// <param name="PlayerId">Integer. ID of the Player.</param>
+        /// <param name="PlayerData">Player. Data for the Player.</param>
+        /// <example>
+        /// POST: /api/PlayerData/UpdatePlayer/2
+        /// BODY: New Player Data for the player at ID 2
+        /// </example> 
         [HttpPost]
         [Route("api/PlayerData/UpdatePlayer/{PlayerId}")]
-        public Player UpdatePlayer(int PlayerId, [FromBody] Player PlayerData)
+        [ResponseType(typeof(Player))]
+        public IHttpActionResult UpdatePlayer(int PlayerId, [FromBody] Player PlayerData)
         {
             db.Players.AddOrUpdate(PlayerData);
             db.SaveChanges();
-            return FindPlayer(PlayerId);
+            return Ok(db.Players.Find(PlayerId));
         }
 
-        // TogglePlayerState
+        /// <summary>
+        /// Toggles the Living/Dead State of the Player.
+        /// </summary>
+        /// <returns>
+        /// HEADER: 200 (OK)
+        /// </returns>
+        /// <param name="PlayerId">Integer. ID of the Player.</param>
+        /// <example>
+        /// GET: /api/PlayerData/ToggleLiveState/2
+        /// </example> 
         [HttpGet]
         [Route("api/PlayerData/ToggleLiveState/{PlayerId}")]
-        public Player ToggleLiveState(int PlayerId)
+        [ResponseType(typeof(Player))]
+        public IHttpActionResult ToggleLiveState(int PlayerId)
         {
             Debug.WriteLine(PlayerId);
-            Player Player = FindPlayer(PlayerId);
+            Player Player = db.Players.Find(PlayerId);
             Player.PlayerAlive = !Player.PlayerAlive;
-            Player = UpdatePlayer(PlayerId, Player);
-            return Player;
+            db.Players.AddOrUpdate(Player);
+            db.SaveChanges();
+            return Ok(db.Players.Find(PlayerId));
         }
 
+        /// <summary>
+        /// Lists all the players on a specific Team.
+        /// </summary>
+        /// <returns>
+        /// HEADER: 200 (OK)
+        /// CONTENT: List of Players
+        /// </returns>
+        /// <param name="TeamId">Integer. ID of the Team.</param>
+        /// <example>
+        /// GET: /api/PlayerData/ListPlayersForTeam/1
+        /// </example> 
         [HttpGet]
         [Route("api/PlayerData/ListPlayersForTeam/{TeamId}")]
-        public IEnumerable<Player> ListPlayersForTeam(int TeamId)
+        [ResponseType(typeof(Player))]
+        public IHttpActionResult ListPlayersForTeam(int TeamId)
         {
             List<Player> Players = db.Players.Where(p => p.Role.TeamId == TeamId).ToList();
-            return Players;
+            return Ok(Players);
         }
 
+        /// <summary>
+        /// Associates a Player with a specified Role.
+        /// </summary>
+        /// <returns>
+        /// HEADER: 200 (OK)
+        /// </returns>
+        /// <param name="PlayerId">Integer. ID of the Player.</param>
+        /// <param name="RoleId">Integer. ID of the Role.</param>
+        /// <example>
+        /// GET: /api/PlayerData/SetPlayerRole/2/1
+        /// </example> 
         [HttpGet]
         [Route("api/PlayerData/SetPlayerRole/{PlayerId}/{RoleId}")]
 
-        public void SetPlayerRole(int PlayerId, int RoleId)
+        public IHttpActionResult SetPlayerRole(int PlayerId, int RoleId)
         {
-            Player Player = FindPlayer(PlayerId);
+            Player Player = db.Players.Find(PlayerId);
             Player.RoleId = RoleId;
             UpdatePlayer(PlayerId,Player);
+            return Ok();
+
         }
 
+        /// <summary>
+        /// Randomly Assigns all Players a usable Role.
+        /// </summary>
+        /// <returns>
+        /// HEADER: 200 (OK)
+        /// CONTENT: List of Players
+        /// </returns>
+        /// <example>
+        /// GET: /api/PlayerData/ShufflePlayerRoles
+        /// </example> 
         [HttpGet]
         [Route("api/PlayerData/ShufflePlayerRoles")]
-        public IEnumerable<Player> ShufflePlayerRoles()
+        [ResponseType(typeof(Player))]
+
+        public IHttpActionResult ShufflePlayerRoles()
         {
             List<Role> Roles = db.Roles.Where(Role => Role.RoleInPlay).ToList();
             IEnumerable<Player> Players = db.Players.ToList();
@@ -140,7 +257,7 @@ namespace n01569183PetProject.Controllers
 
             }
 
-            return db.Players.ToList();
+            return Ok(db.Players.ToList());
         }
     }
 }

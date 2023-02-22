@@ -50,8 +50,10 @@ namespace n01569183PetProject.Controllers
         // GET: Role
         public ActionResult Index()
         {
-            return View();
+            return Redirect("List");
         }
+
+        // GET: Role/List
 
         public ActionResult List()
         {
@@ -61,6 +63,9 @@ namespace n01569183PetProject.Controllers
             return View(Roles);
         }
 
+
+        // GET: Role/Show/2
+
         public ActionResult Show(int id)
         {
             string url = "RoleData/FindRole/" + id;
@@ -69,6 +74,9 @@ namespace n01569183PetProject.Controllers
             return View(Role);
 
         }
+
+        // GET: Role/Update/2
+
         [HttpGet]
         [Authorize]
         public ActionResult Update(int id)
@@ -82,6 +90,8 @@ namespace n01569183PetProject.Controllers
 
         }
 
+        // GET: Role/New
+
         [Authorize]
         public ActionResult New()
         {
@@ -92,7 +102,10 @@ namespace n01569183PetProject.Controllers
             return View(Teams);
         }
 
+        // POST: Role/Save
+        // BODY: Role, RoleIcon
         [Authorize]
+        [HttpPost]
         public ActionResult Save(Role Role, HttpPostedFileBase RoleIcon)
         {
             GetApplicationCookie();
@@ -117,6 +130,8 @@ namespace n01569183PetProject.Controllers
 
         }
 
+        // GET: Role/ConfirmDelete/2
+
         public ActionResult ConfirmDelete(int id)
         {
             string url = "RoleData/FindRole/" + id;
@@ -125,14 +140,19 @@ namespace n01569183PetProject.Controllers
 
             return View(Role);
         }
-        [Authorize]
 
+        // POST: Role/Delete/2
+        [HttpPost]
+        [Authorize]
         public ActionResult Delete(int RoleId)
         {
             string url = "RoleData/DeleteRole/" + RoleId;
             HttpResponseMessage response = client.GetAsync(url).Result;
             return Redirect("/Role/List");
         }
+
+        // Prepares a JSON playload
+
         private HttpContent Prepare(Role role)
         {
             string jsonpayload = jss.Serialize(role);

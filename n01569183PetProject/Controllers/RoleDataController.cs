@@ -11,6 +11,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web;
 using System.Web.Http;
+using System.Web.Http.Description;
 using System.Web.Http.Results;
 
 namespace n01569183PetProject.Controllers
@@ -18,36 +19,81 @@ namespace n01569183PetProject.Controllers
     public class RoleDataController : ApiController
     {
         public ApplicationDbContext db = new ApplicationDbContext();
-        //ListRoles
+
+        /// <summary>
+        /// List all Roles in the Database
+        /// </summary>
+        /// <returns>
+        /// HEADER: 200 (OK)
+        /// CONTENT: List of Roles
+        /// </returns>
+        /// <example>
+        /// GET: /api/RoleData/ListRoles
+        /// </example> 
         [HttpGet]
-        public IEnumerable<Role> ListRoles()
+        [ResponseType(typeof(Role))]
+        public IHttpActionResult ListRoles()
         {
             List<Role> Roles = db.Roles.ToList();
             Roles = Roles.OrderBy(role => role.TeamId).ToList();
 
-            return Roles;
+            return Ok(Roles);
         }
-        //AddRole
+
+        /// <summary>
+        /// Add a new Role to the Database.
+        /// </summary>
+        /// <returns>
+        /// HEADER: 200 (OK)
+        /// </returns>
+        /// <example>
+        /// POST: /api/RoleData/AddRole
+        /// BODY: Role
+        /// </example> 
         [HttpPost]
-        public void AddRole([FromBody] Role RoleData)
+        public IHttpActionResult AddRole([FromBody] Role RoleData)
         {
             Debug.Write(RoleData.RoleName);
             db.Roles.Add(RoleData);
             db.SaveChanges();
+            return Ok();
         }
 
+        /// <summary>
+        /// List all Roles associated with a Specified Team.
+        /// </summary>
+        /// <returns>
+        /// HEADER: 200 (OK)
+        /// CONTENT: List of Roles
+        /// </returns>
+        /// <example>
+        /// GET: /api/RoleData/ListRolesforTeam/1
+        /// </example>
         [HttpGet]
         [Route("api/RoleData/ListRolesforTeam/{TeamId}")]
-        public IEnumerable<Role> ListRolesforTeam(int TeamId)
+        [ResponseType(typeof(Role))]
+        public IHttpActionResult ListRolesforTeam(int TeamId)
         {
             List<Role> Roles = db.Roles.Where(role => role.TeamId == TeamId).ToList();
-            return Roles;
+            return Ok(Roles);
         }
 
-        //FindRole
+        /// <summary>
+        /// Find a specific Role.
+        /// </summary>
+        /// <returns>
+        /// HEADER: 200 (OK)
+        /// CONTENT: Role DTO
+        /// </returns>
+        /// <param name="RoleId">Integer. ID of a Role.</param>
+        /// <example>
+        /// GET: /api/RoleData/FindRole/6
+        /// </example>
         [HttpGet]
         [Route("api/RoleData/FindRole/{RoleId}")]
-        public RoleDto FindRole(int RoleId)
+        [ResponseType(typeof(RoleDto))]
+
+        public IHttpActionResult FindRole(int RoleId)
         {
             Role FoundRole = db.Roles.Find(RoleId);
             if (FoundRole == null) return null;
@@ -64,23 +110,46 @@ namespace n01569183PetProject.Controllers
 
             };
 
-            return dto;
+            return Ok(dto);
         }
 
-        //DeleteRole
+        /// <summary>
+        /// Delete a specific Role.
+        /// </summary>
+        /// <returns>
+        /// HEADER: 200 (OK)
+        /// </returns>
+        /// <param name="RoleId">Integer. ID of a Role.</param>
+        /// <example>
+        /// GET: /api/RoleData/DeleteRole/6
+        /// </example>
         [HttpGet]
         [Route("api/RoleData/DeleteRole/{RoleId}")]
-        public bool DeleteRole(int RoleId)
+        public IHttpActionResult DeleteRole(int RoleId)
         {
             Role FoundRole = db.Roles.Find(RoleId);
             db.Roles.Remove(FoundRole);
             db.SaveChanges();
-            return true;
+            return Ok();
         }
-        //UpdateRole
+
+        /// <summary>
+        /// Delete a specific Role.
+        /// </summary>
+        /// <returns>
+        /// HEADER: 200 (OK)
+        /// CONTENT: Role DTO
+        /// </returns>
+        /// <param name="RoleId">Integer. ID of a Role.</param>
+        /// <param name="RoleData">Role. Data for the Role.</param>
+        /// <example>
+        /// POST: /api/RoleData/UpdateRole/6
+        /// BODY: Role
+        /// </example>
         [HttpPost]
         [Route("api/RoleData/UpdateRole/{RoleId}")]
-        public RoleDto UpdateRole(int RoleId, [FromBody] Role RoleData)
+        [ResponseType(typeof(RoleDto))]
+        public IHttpActionResult UpdateRole(int RoleId, [FromBody] Role RoleData)
         {
             Role FoundRole = db.Roles.Find(RoleId);
             if (FoundRole != null)
@@ -93,9 +162,21 @@ namespace n01569183PetProject.Controllers
             
             db.Roles.AddOrUpdate(RoleData);
             db.SaveChanges();
-            return FindRole(RoleId);
+            return Ok(db.Roles.Find(RoleId));
         }
 
+
+        /// <summary>
+        /// Specifies which Roles are in play.
+        /// </summary>
+        /// <returns>
+        /// HEADER: 200 (OK)
+        /// </returns>
+        /// <param name="RoleIdSet">RoleIdSet. List of role IDs, in array format.</param>
+        /// <example>
+        /// POST: /api/RoleData/UseRoles
+        /// BODY: { RoleIds: [2,7,1] }
+        /// </example>
         [HttpPost]
         [Route("api/RoleData/UseRoles")]
 
@@ -112,6 +193,37 @@ namespace n01569183PetProject.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// List all Players with a specific Role.
+        /// </summary>
+        /// <returns>
+        /// HEADER: 200 (OK)
+        /// CONTENT: List of Roles.
+        /// </returns>
+        /// <param name="RoleId">Integer. ID of a Role.</param>
+        /// <example>
+        /// GET: /api/RoleData/ListPlayersForRole/2
+        /// </example>
+        [HttpGet]
+        [Route("api/RoleData/ListPlayersForRole/{RoleId}")]
+        [ResponseType(typeof(Player))]
+        public IHttpActionResult ListPlayersForRole(int RoleId)
+        {
+            List<Player> Players = db.Players.Where(p => p.RoleId == RoleId).ToList();
+            return Ok(Players);
+        }
+
+        /// <summary>
+        /// Upload an Image for a Role.
+        /// </summary>
+        /// <returns>
+        /// HEADER: 200 (OK)
+        /// </returns>
+        /// <param name="RoleId">Integer. ID of a Role.</param>
+        /// <example>
+        /// POST: /api/RoleData/UploadRoleImg/2
+        /// BODY: Image File
+        /// </example>
         [HttpPost]
         [Route("api/RoleData/UploadRoleImg/{RoleId}")]
         public IHttpActionResult UploadRoleImg(int RoleId)

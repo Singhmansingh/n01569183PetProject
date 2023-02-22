@@ -22,12 +22,15 @@ namespace n01569183PetProject.Controllers
             client.BaseAddress = new Uri("https://localhost:44391/api/");
         }
 
+        // GET: Team/New
+        [Authorize]
         public ActionResult New()
         {
+            GetApplicationCookie();
             return View();
         }
 
-        // GET: Team
+        // GET: Team/List
         public ActionResult List()
         {
             string url = "TeamData/ListTeams";
@@ -36,6 +39,7 @@ namespace n01569183PetProject.Controllers
             IEnumerable<Team> Teams = response.Content.ReadAsAsync<IEnumerable<Team>>().Result;
             return View(Teams);
         }
+        // GET: Team/Show/3
 
         public ActionResult Show(int id)
         {
@@ -47,8 +51,13 @@ namespace n01569183PetProject.Controllers
 
         }
 
+        // GET: Team/Update/3
+
+        [Authorize]
         public ActionResult Update(int id)
         {
+            GetApplicationCookie();
+
             string url = "TeamData/FindTeamWithRoles/" + id;
             HttpResponseMessage response = client.GetAsync(url).Result;
             TeamDto Team = response.Content.ReadAsAsync<TeamDto>().Result;
@@ -57,6 +66,7 @@ namespace n01569183PetProject.Controllers
 
         }
 
+        // GET: Team/ConfirmDelete/3
         public ActionResult ConfirmDelete(int id)
         {
             string url = "TeamData/FindTeam/" + id;
@@ -66,6 +76,8 @@ namespace n01569183PetProject.Controllers
             return View(Team);
         }
 
+        // GET: Team/Delete/3
+        [Authorize]
         public ActionResult Delete(int TeamId)
         {
             string url = "TeamData/DeleteTeam/" + TeamId;
@@ -73,9 +85,15 @@ namespace n01569183PetProject.Controllers
             return Redirect("/Team/List");
         }
 
+        // POST: Team/Add
+        // BODY: Team
+
         [HttpPost]
+        [Authorize]
         public ActionResult Add(string TeamName, string TeamWinCondition, string TeamDescription, string TeamColor)
         {
+            GetApplicationCookie();
+
             string url = "TeamData/AddTeam";
 
             Team Team = new Team()
@@ -95,10 +113,16 @@ namespace n01569183PetProject.Controllers
         }
 
 
+        // POST: Team/Save
+        // BODY: Team, TeamIcon
+
+        [Authorize]
+
         public ActionResult Save(Team Team, HttpPostedFileBase TeamIcon)
         {
 
-        
+            GetApplicationCookie();
+
             string jsonpayload = jss.Serialize(Team);
             HttpContent content = new StringContent(jsonpayload);
             content.Headers.ContentType.MediaType = "application/json";
@@ -120,6 +144,26 @@ namespace n01569183PetProject.Controllers
 
 
             return Redirect("Show/"+ Team.TeamId);
+        }
+
+        private void GetApplicationCookie()
+        {
+            string token = "";
+            //HTTP client is set up to be reused, otherwise it will exhaust server resources.
+            //This is a bit dangerous because a previously authenticated cookie could be cached for
+            //a follow-up request from someone else. Reset cookies in HTTP client before grabbing a new one.
+            client.DefaultRequestHeaders.Remove("Cookie");
+            if (!User.Identity.IsAuthenticated) return;
+
+            HttpCookie cookie = System.Web.HttpContext.Current.Request.Cookies.Get(".AspNet.ApplicationCookie");
+            if (cookie != null) token = cookie.Value;
+
+            //collect token as it is submitted to the controller
+            //use it to pass along to the WebAPI.
+            Debug.WriteLine("Token Submitted is : " + token);
+            if (token != "") client.DefaultRequestHeaders.Add("Cookie", ".AspNet.ApplicationCookie=" + token);
+
+            return;
         }
     }
 }
