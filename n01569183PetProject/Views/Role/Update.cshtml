@@ -31,10 +31,12 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
+
                         <label for="RoleMaxCount" class="control-label">Max Amount of Role</label>
                         <input type="number" min="0" id="RoleMaxCount" class="form-control" name="RoleMaxCount" value="@Model.RoleMaxCount" />
                         <label>
-                            <input type="checkbox" onclick="toggleUnlimited(this)" />
+
+                            <input type="checkbox" id="unlimitedCheckbox" onclick="toggleUnlimited(this)" />
                             <span>Unlimited</span>
                         </label>
                     </div>
@@ -110,8 +112,18 @@
             $('tr').removeClass('info');
             $(this).addClass('info');
             $('#TeamId').val(parseInt($(this).attr('teamid')));
-
         })
+
+         @{
+                string isUnlimited = "false";
+                if (Model.RoleMaxCount == 0)
+                {
+                    isUnlimited = "true";
+                }
+
+             }
+            gid("RoleMaxCount").disabled = @isUnlimited;
+            gid("unlimitedCheckbox").checked = @isUnlimited;
     }
 
     function toggleUnlimited(input) {

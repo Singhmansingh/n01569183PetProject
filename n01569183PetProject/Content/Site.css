@@ -54,3 +54,9 @@ textarea {
     margin:0;
     padding: 0;
 }
+
+.mouse-hover:hover {
+    user-select:none;
+    cursor: pointer;
+    text-decoration:underline;
+}

@@ -90,7 +90,7 @@
         if (roleElement.querySelectorAll("select").length > 0) return;
         var res = await api("TeamData/ListTeamsWithRoles", (res) => {
 
-            var selectBox = `<select class="form-control table-select" onchange="setRole(this,${playerId},${teamId})" onfocusout="getPlayerList(${teamId})">`;
+            var selectBox = `<select class="form-control table-select" onchange="setRole(this,${playerId},${teamId})" onfocusout="getPlayerList(${teamId})" style="padding-left: 0.9em;">`;
 
             res.forEach(team => {
                 selectBox += `<optgroup label="${team.TeamName}">`;
@@ -140,7 +140,7 @@
                     <td><button class="btn ${player.PlayerAlive ? 'btn-danger' : 'btn-success'}" onclick="killOrRes(${player.PlayerId},${currentTeamId})">${player.PlayerAlive ? '&#9760;' : '&#9764;'}</button></td>
                     <td><a href="/Game/Player?name=${player.PlayerName}">${player.PlayerName}</a></td>
                     <td style="color: ${player.Role.Team.TeamColor}">${player.Role.Team.TeamName}</td>
-                    <td onclick="renderRoleSelectList(this,${player.RoleId},${player.PlayerId},${currentTeamId})">${player.Role.RoleName}</td>
+                    <td onclick="renderRoleSelectList(this,${player.RoleId},${player.PlayerId},${currentTeamId})"><span class="text-primary mouse-hover">${player.Role.RoleName}</span></td>
                     <td colspan="5">${player.Role.RoleDescription}</td>
                 </tr>
                 `

@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNet.Identity
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -22,10 +24,20 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("Teams", "List", "Team")</li>
-                    <li>@Html.ActionLink("Roles", "List", "Role")</li>
-                    <li>@Html.ActionLink("Players", "List", "Player")</li>
-                    <li>@Html.ActionLink("Game", "Index", "Game")</li>
+
+                    @if (Request.IsAuthenticated)
+                    {
+                        <li>@Html.ActionLink("Teams", "List", "Team")</li>
+                        <li>@Html.ActionLink("Roles", "List", "Role")</li>
+                        <li>@Html.ActionLink("Players", "List", "Player")</li>
+                        <li>@Html.ActionLink("Game", "Index", "Game")</li>
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink("Game", "Player", "Game")</li>
+
+                    }
+
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
@@ -48,7 +60,7 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
-<script>
+    <script>
         function gid(id) {
             return document.getElementById(id);
         }
@@ -95,15 +107,15 @@
         }
 
         function popup(url) {
-        var xhr = new XMLHttpRequest();
-        xhr.open('get',url,true);
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                display('PopupBox', xhr.response);
+            var xhr = new XMLHttpRequest();
+            xhr.open('get', url, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    display('PopupBox', xhr.response);
+                }
             }
+            xhr.send(null);
         }
-        xhr.send(null);
-    }
 
         function display(id, content) {
             document.getElementById(id).innerHTML = content;
@@ -113,6 +125,6 @@
         function cancelPopup() {
             document.getElementById("PopupBox").classList.add('hidden');
         }
-</script>
+    </script>
 </body>
 </html>

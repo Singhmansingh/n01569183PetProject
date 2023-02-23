@@ -5,7 +5,15 @@
 <div class="jumbotron">
     <h1>Mafia</h1>
     <p class="lead">Classic Social Deduction party game, now extended with the power of the web.</p>
-    <p><a href="/Game" class="btn btn-danger btn-lg">Start Mafia</a></p>
+    @{
+        string src = "/Game/Player";
+        if (Request.IsAuthenticated)
+        {
+            src = "/Game";
+        }
+    }
+
+    <p><a href="@src" class="btn btn-danger btn-lg">Start Mafia</a></p>
 </div>
 
 <h2>Customization</h2>
@@ -17,16 +25,25 @@
             Create your own teams, Good, Evil, or otherwise! Define your own win conditions
             to create your very own version of Mafia.
         </p>
-        <p><a class="btn btn-default" href="/Team/List">Learn more &raquo;</a></p>
+        @if (Request.IsAuthenticated)
+        {
+            <p><a class="btn btn-default" href="/Team/List">Learn more &raquo;</a></p>
+        }
     </div>
     <div class="col-md-4">
         <h3>Roles</h3>
         <p>Enjoy the abilities of Detective and Nurse? Expand your roster with custom role abilities, limited only by your creativity.</p>
-        <p><a class="btn btn-default" href="/Role/List">Learn more &raquo;</a></p>
+        @if (Request.IsAuthenticated)
+            {
+                <p><a class="btn btn-default" href="/Role/List">Learn more &raquo;</a></p>
+            }
     </div>
     <div class="col-md-4">
         <h3>Player View</h3>
         <p>No need for cards, or reminders. Players have a special view that tracks their team, role, living state, and abilities.</p>
+        @if (Request.IsAuthenticated) { 
+
         <p><a class="btn btn-default" href="/Game">Learn more &raquo;</a></p>
+        }
     </div>
 </div>

@@ -36,7 +36,7 @@ namespace n01569183PetProject.Controllers
         }
 
         // GET: Player/Show/3
-
+        [Authorize]
         public ActionResult Show(int id)
         {
             string url = "PlayerData/FindPlayer/" + id;

@@ -3,14 +3,16 @@
     ViewBag.Title = "Player";
 }
 
-<div style="display:none;">
+<div id="search-container" class="hide container row">
+    <h1>Search for Player</h1>
     <form method="get" class="form-inline" id="SearchForm" name="SearchForm">
         <div class="form-group">
             <label>Name</label>
             <input name="name" class="form-control" id="fName" />
         </div>
-        <input class="form-control btn btn-primary" id="Search" type="submit" value="Search" />
-    </form>
+        <input class="form-control btn btn-primary" id="Search" type="submit" value="Log in &raquo;" />
+    </form> 
+    <p id="searcherr" class="t  ext-danger hide">Player not found.</p>
 </div>
 
 
@@ -18,11 +20,10 @@
     <h1 id="PlayerName">Something</h1>
     <hr />
 
-
     <div class="img-container" style="display:inline-flex; justify-content:center;"><img id="TeamIcon" src="~/Content/Images/Teams/default.jpg" width="150" /></div>
 
     <h2><span id="TeamName">Good</span> - <span id="RoleName">Civillian</span></h2>
-    <p>You are <span id="PlayerAlive">Alive</span></p>
+    <p>You are <span id="PlayerAlive" class="success">Alive</span></p>
 
     <h3>Your Ability</h3>
     <p id="RoleDescription">lorem ipsum dollar sit amet.</p>
@@ -34,7 +35,15 @@
         const q = location.search;
         const params = new URLSearchParams(q);
         const name = params.get("name");
-        FindPlayerByName(name);
+      
+        if (!name) {
+            gid("search-container").classList.remove("hide");
+            gid("searcherr").classList.add("hide");
+        }
+        else {
+            FindPlayerByName(name);
+        }
+        
     }
 
     function FindPlayerByName(q) {
@@ -46,9 +55,13 @@
 
     function renderNoPlayer() {
         gid("output").classList.add("hide");
+        gid("search-container").classList.remove("hide");
+        gid("searcherr").classList.remove("hide");
     }
 
     function renderPlayer(player) {
+        gid("search-container").classList.add("hide");
+
         set("PlayerName", player.PlayerName);
         set("RoleName", player.Role.RoleName);
 
@@ -59,7 +72,7 @@
             src = "/Content/Images/Roles/" + player.Role.RoleId + "." + player.Role.RoleImgExt
         }
         gid("TeamIcon").src = src;
-        set("PlayerAlive", player.PlayerAlive ? "Alive" : "Dead" );
+        set("PlayerAlive", player.PlayerAlive ? "Alive" : "Dead");
 
         set("TeamWinCondition", player.Role.Team.TeamWinCondition);
         set("RoleDescription", player.Role.RoleDescription);
