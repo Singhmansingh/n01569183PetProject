@@ -72,7 +72,12 @@
             xhr.onreadystatechange = function () {
                 if (xhr.readyState === 4) {
                     if (xhr.status === 200) {
-                        callback(JSON.parse(xhr.response));
+                        var res;
+                        try {
+                            res = JSON.parse(xhr.response);
+                        }
+                        catch { }
+                        callback(res);
                     }
                     else callback(null);;
                 }

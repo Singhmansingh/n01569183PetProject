@@ -176,6 +176,27 @@ namespace n01569183PetProject.Controllers
         }
 
         /// <summary>
+        /// Reset all player's living state to True.
+        /// </summary>
+        /// <returns>
+        /// HEADER: 200 (OK)
+        /// </returns>
+        /// <example>
+        /// GET: /api/PlayerData/ResetAllLiveState
+        /// </example> 
+        [HttpGet]
+        [Route("api/PlayerData/ResetAllLiveState")]
+        public IHttpActionResult ResetAllLiveState()
+        {
+            db.Players.ToList().ForEach(Player =>
+            {
+                Player.PlayerAlive = true;
+            });
+            db.SaveChanges();
+            return Ok();
+        }
+
+        /// <summary>
         /// Lists all the players on a specific Team.
         /// </summary>
         /// <returns>

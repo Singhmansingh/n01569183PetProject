@@ -1,8 +1,13 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Player";
 }
-
+@if (Request.IsAuthenticated)
+{
+    <ol class="breadcrumb">
+        <li><a href="/Game" class="link">&laquo; Return to Game</a></li>
+    </ol>
+    
+}
 <div id="search-container" class="hide container row">
     <h1>Search for Player</h1>
     <form method="get" class="form-inline" id="SearchForm" name="SearchForm">
@@ -11,7 +16,7 @@
             <input name="name" class="form-control" id="fName" />
         </div>
         <input class="form-control btn btn-primary" id="Search" type="submit" value="Log in &raquo;" />
-    </form> 
+    </form>
     <p id="searcherr" class="t  ext-danger hide">Player not found.</p>
 </div>
 
@@ -35,7 +40,7 @@
         const q = location.search;
         const params = new URLSearchParams(q);
         const name = params.get("name");
-      
+
         if (!name) {
             gid("search-container").classList.remove("hide");
             gid("searcherr").classList.add("hide");
@@ -43,7 +48,7 @@
         else {
             FindPlayerByName(name);
         }
-        
+
     }
 
     function FindPlayerByName(q) {

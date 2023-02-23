@@ -38,7 +38,7 @@
     </tbody>
     <tfoot>
         <tr class="active">
-            <td></td>
+            <td><button class="btn btn-success" onclick="ressurectAll()">Res</button></td>
             <td colspan="4"><a href="/Player/New" target="_blank">+ Player</a></td>
         </tr>
     </tfoot>
@@ -146,6 +146,10 @@
                 `
         })
 
+    }
+
+    function ressurectAll() {
+        api("PlayerData/ResetAllLiveState", () => getPlayerList(0));
     }
 
     function killOrRes(playerId, currentTeamId = 0) {
