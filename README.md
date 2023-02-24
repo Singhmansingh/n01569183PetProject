@@ -47,6 +47,9 @@ The following features are to be added in the future:
 ## Sources
 
 Mafia Icon - https://www.amazon.ca/Vintage-Gangster-Silhouette-Cartoon-Sticker/dp/B073XV2QHP
+
 Good Icon - https://town-of-salem.fandom.com/wiki/Town_of_Salem_Wiki?file=Amnesiac+icon.png
+
 Wildcard Icon - https://www.flaticon.com/free-icon/joker-hat_1924
+
 Default Team Icon - https://www.dreamstime.com/
