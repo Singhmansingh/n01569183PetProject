@@ -8,6 +8,8 @@
 
 This app is designed for Narrators to run a game of Mafia, without the need for a deck of cards, or memorizing abilities. It also enables Narrators to create their Own version of Mafia, with custom roles, teams, and abilities.
 
+A Demo of the app can be found [here](https://youtu.be/vsPAxmPxa9s).
+
 ## Features
 
 ### Teams
