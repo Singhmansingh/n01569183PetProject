@@ -2,7 +2,9 @@
     ViewBag.Title = "Home Page";
 }
 
-<div class="jumbotron">
+<div class="jumbotron text-center" >
+    <img src="~/Content/Images/Static/mafia.png" width="300" />
+
     <h1>Mafia</h1>
     <p class="lead">Classic Social Deduction party game, now extended with the power of the web.</p>
     @{
@@ -16,10 +18,14 @@
     <p><a href="@src" class="btn btn-danger btn-lg">Start Mafia</a></p>
 </div>
 
+<div>
+</div>
+
 <h2>Customization</h2>
 <p>This app not only supports tradition Mafia play, but also expanded custom abilities to tailor the experience to your player group.</p>
 <div class="row">
     <div class="col-md-4">
+        <img src="~/Content/Images/Static/Teams.png"  class="image-feature" />
         <h3>Teams</h3>
         <p>
             Create your own teams, Good, Evil, or otherwise! Define your own win conditions
@@ -31,19 +37,24 @@
         }
     </div>
     <div class="col-md-4">
+        <img src="~/Content/Images/Static/Roles.png" class="image-feature"  />
+
         <h3>Roles</h3>
         <p>Enjoy the abilities of Detective and Nurse? Expand your roster with custom role abilities, limited only by your creativity.</p>
         @if (Request.IsAuthenticated)
-            {
-                <p><a class="btn btn-default" href="/Role/List">Learn more &raquo;</a></p>
-            }
+        {
+            <p><a class="btn btn-default" href="/Role/List">Learn more &raquo;</a></p>
+        }
     </div>
     <div class="col-md-4">
+        <img src="~/Content/Images/Static/Player.png" class="image-feature" />
+
         <h3>Player View</h3>
         <p>No need for cards, or reminders. Players have a special view that tracks their team, role, living state, and abilities.</p>
-        @if (Request.IsAuthenticated) { 
+        @if (Request.IsAuthenticated)
+        {
 
-        <p><a class="btn btn-default" href="/Game">Learn more &raquo;</a></p>
+            <p><a class="btn btn-default" href="/Game">Learn more &raquo;</a></p>
         }
     </div>
 </div>

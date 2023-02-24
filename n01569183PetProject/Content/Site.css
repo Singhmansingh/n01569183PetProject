@@ -25,6 +25,13 @@ textarea {
     max-width: 280px;
 }*/
 
+.image-feature {
+    width: 100%;
+    object-fit:contain;
+    background: lightgrey;
+    padding: 5px;
+}
+
 
 textarea {
     resize: none;
@@ -59,4 +66,16 @@ textarea {
     user-select:none;
     cursor: pointer;
     text-decoration:underline;
+}
+
+.alive, .dead {
+    font-weight: bold;
+}
+
+.alive {
+    color: green;
+}
+
+.dead {
+    color: red;
 }

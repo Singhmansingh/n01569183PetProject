@@ -176,22 +176,35 @@ namespace n01569183PetProject.Controllers
         }
 
         /// <summary>
-        /// Reset all player's living state to True.
+        /// Reset all player's living state to True that are on that team. A TeamId of 0 resets all players.
         /// </summary>
         /// <returns>
         /// HEADER: 200 (OK)
         /// </returns>
         /// <example>
-        /// GET: /api/PlayerData/ResetAllLiveState
+        /// GET: /api/PlayerData/ResetTeamLiveState/2
         /// </example> 
         [HttpGet]
-        [Route("api/PlayerData/ResetAllLiveState")]
-        public IHttpActionResult ResetAllLiveState()
+        [Route("api/PlayerData/ResetTeamLiveState/{TeamId}")]
+        public IHttpActionResult ResetTeamLiveState(int TeamId)
         {
-            db.Players.ToList().ForEach(Player =>
+            Debug.WriteLine(TeamId);
+            if (TeamId == 0)
             {
-                Player.PlayerAlive = true;
-            });
+                db.Players.ToList().ForEach(Player =>
+                {
+                    Player.PlayerAlive = true;
+                });
+            }
+            else
+            {
+
+                db.Players.Where(Player => Player.Role.TeamId == TeamId).ToList().ForEach(Player =>
+                {
+                    Player.PlayerAlive = true;
+                });
+            }
+
             db.SaveChanges();
             return Ok();
         }

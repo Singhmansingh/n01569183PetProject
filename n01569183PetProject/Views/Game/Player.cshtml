@@ -25,10 +25,12 @@
     <h1 id="PlayerName">Something</h1>
     <hr />
 
-    <div class="img-container" style="display:inline-flex; justify-content:center;"><img id="TeamIcon" src="~/Content/Images/Teams/default.jpg" width="150" /></div>
+    <div class="img-container" style="display:inline-flex; justify-content:center;">
+        <img id="RoleIcon" src="~/Content/Images/Roles/default.jpg" width="150" class="shadow"/>
+    </div>
 
     <h2><span id="TeamName">Good</span> - <span id="RoleName">Civillian</span></h2>
-    <p>You are <span id="PlayerAlive" class="success">Alive</span></p>
+    <p class="lead">You are <span id="PlayerAlive" class="success">Alive</span></p>
 
     <h3>Your Ability</h3>
     <p id="RoleDescription">lorem ipsum dollar sit amet.</p>
@@ -76,8 +78,13 @@
         if (player.Role.RoleHasImg) {
             src = "/Content/Images/Roles/" + player.Role.RoleId + "." + player.Role.RoleImgExt
         }
-        gid("TeamIcon").src = src;
+        gid("RoleIcon").src = src;
+        gid("RoleIcon").style.filter = "drop-shadow(0px 0px 7px " + player.Role.Team.TeamColor + ")";
+
         set("PlayerAlive", player.PlayerAlive ? "Alive" : "Dead");
+        gid("PlayerAlive").classList.add(player.PlayerAlive ? "alive" : "dead");
+
+
 
         set("TeamWinCondition", player.Role.Team.TeamWinCondition);
         set("RoleDescription", player.Role.RoleDescription);

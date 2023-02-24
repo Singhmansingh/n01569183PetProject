@@ -38,7 +38,7 @@
     </tbody>
     <tfoot>
         <tr class="active">
-            <td><button class="btn btn-success" onclick="ressurectAll()">Res</button></td>
+            <td><button id="Ressurect" class="btn btn-success" onclick="ressurectAll()">Res</button></td>
             <td colspan="4"><a href="/Player/New" target="_blank">+ Player</a></td>
         </tr>
     </tfoot>
@@ -78,6 +78,8 @@
                 renderPlayerList(res, teamId);
             });
         }
+
+        gid("Ressurect").onclick = () => ressurectAll(teamId);
     }
     function setRole(selectBox, playerId,teamId) {
         console.log(selectBox.value, playerId);
@@ -148,8 +150,8 @@
 
     }
 
-    function ressurectAll() {
-        api("PlayerData/ResetAllLiveState", () => getPlayerList(0));
+    function ressurectAll(currentTeamId) {
+        api("PlayerData/ResetTeamLiveState/" + currentTeamId, () => getPlayerList(currentTeamId));
     }
 
     function killOrRes(playerId, currentTeamId = 0) {
