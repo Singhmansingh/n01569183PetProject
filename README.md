@@ -11,22 +11,22 @@ This app is designed for Narrators to run a game of Mafia, without the need for 
 ## Features
 
 ### Teams
-<p><img width="280" src="n01569183PetProject/Content/Images/Static/Teams.png"/></p>
+<p><img width="350" src="n01569183PetProject/Content/Images/Static/Teams.png"/></p>
 
 Create custom Teams with an Image, Flavor Description and Win Condition
 
-### Roles
-<p><img width="280" src="n01569183PetProject/Content/Images/Static/Roles.png"/></p>
-Create custom Roles on a Team with an Icon, Ability Description, and other config rules
+### Roles & Players
+<p><img width="350" src="n01569183PetProject/Content/Images/Static/Roles.png"/></p>
+Create custom Roles on a Team with an Icon, Ability Description, and other config rules. Add Players and assign them the roles
 
 ### Game Screen
+<p><img width="350" src="n01569183PetProject/Content/Images/Static/Game.png"/></p>
+Interactive game control panel for the narrator to select and assign roles, manage player living states, and view team win conditions and abilities
 
+### Player Screen
+<p><img width="350" src="n01569183PetProject/Content/Images/Static/Player.png"/></p>
 
-
-1. CRUD Players, and assign roles
-1. Interactive game control panel for the narrator to select and assign roles, manage player living states, and view team win conditions and abilities
-1. Mobile-first Player view that players can use to see their role, living state, abilities and win conditions
-1. Narrator Authentication and Security Features
+Mobile-first Player view that players can use to see their role, living state, abilities and win conditions with Narrator Authentication and Security Features.
 
 ## Tools
 
