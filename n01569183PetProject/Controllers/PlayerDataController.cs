@@ -268,24 +268,40 @@ namespace n01569183PetProject.Controllers
 
         public IHttpActionResult ShufflePlayerRoles()
         {
+            // Get a list of Roles that are in play
             List<Role> Roles = db.Roles.Where(Role => Role.RoleInPlay).ToList();
+
+            // Get a list of players
             IEnumerable<Player> Players = db.Players.ToList();
             //src : https://stackoverflow.com/questions/108819/best-way-to-randomize-an-array-with-net
+
+            // create an instance of the random library
             var rng = new Random();
 
             foreach (Player player in Players)
             {
+                // get a random index for the current state of the Roles List
                 int index = rng.Next(0, Roles.Count());
 
+                // assign the role to the current player
                 SetPlayerRole(player.PlayerId, Roles[index].RoleId);
+
                 Debug.WriteLine("Currently at index " + index + " with Role " + Roles[index].RoleName);
+
+                // select the current indexed role ID
                 int CurrentRoleId = Roles[index].RoleId;
+
+                // get a list of all players using this role currently
                 List<Player> PlayersUsingThisRole = db.Players.Where(p => p.RoleId == CurrentRoleId).ToList();
+
                 Debug.WriteLine("Currently at index " + index + " with Role " + Roles[index].RoleName + ". " + PlayersUsingThisRole.Count() + "players have this role.");
 
+                // If that role is limited, and that limit is reached or exceeded 
                 if (Roles[index].RoleMaxCount > 0 && PlayersUsingThisRole.Count() >= Roles[index].RoleMaxCount)
                 {
                     Debug.WriteLine("Removing at index " + index + " Role " + Roles[index].RoleName);
+                    
+                    // Remove the role from the list, so the next players cannot get it
                     Roles.RemoveAt(index);
                 }
 
